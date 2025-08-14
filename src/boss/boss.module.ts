@@ -7,6 +7,7 @@ import { BossEntity } from 'src/entitys/boss.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([BossEntity])],
   controllers: [BossController],
-  providers: [BossService]
+  providers: [BossService],
+  exports: [BossService]
 })
 export class BossModule {}

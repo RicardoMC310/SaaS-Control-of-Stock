@@ -1,6 +1,6 @@
-import { BadGatewayException, Injectable } from '@nestjs/common';
+import { BadGatewayException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BossDto, BossSearchDto } from 'src/dto/boss.dto';
+import { BossDto, BossResponseDto } from 'src/dto/boss.dto';
 import { BossEntity } from 'src/entitys/boss.entity';
 import { Repository } from 'typeorm';
 import { createHash } from 'crypto';
@@ -26,8 +26,8 @@ export class BossService {
     }
 
     async create(boss: BossDto): Promise<BossEntity> {
-        const existingBoss = await this.bossRepository.findOne({ 
-            where: [{ cpf: this.createhashCpf(boss.cpf) }, { email: boss.email }] 
+        const existingBoss = await this.bossRepository.findOne({
+            where: [{ cpf: this.createhashCpf(boss.cpf) }, { email: boss.email }]
         });
 
         if (existingBoss) {
@@ -41,5 +41,21 @@ export class BossService {
         });
 
         return this.bossRepository.save(newBoss);
+    }
+
+    async findByEmail(email: string): Promise<BossResponseDto | null> {
+        const boss = await this.bossRepository.findOne({
+            where: { email: email.trim().toLowerCase() }
+        });
+
+        if (!boss) {
+            throw new NotFoundException("Boss not found with this email");
+        }
+
+        return {
+            name: boss?.name,
+            email: boss?.email,
+            password: boss?.password
+        };
     }
 }

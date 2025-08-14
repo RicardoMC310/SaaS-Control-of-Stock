@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsString, Matches } from "class-validator";
+import { IsCPF } from "src/utils/boss.validator";
 
 export class BossDto {
     @IsNotEmpty()
@@ -15,7 +16,8 @@ export class BossDto {
 
     @IsNotEmpty()
     @IsString()
-    @Matches(/^\d{3}.\d{3}.\d{3}-\d{2}$/, {
+    @IsCPF()
+    @Matches(/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/, {
         message: 'CPF must be in the format XXX.XXX.XXX-XX',
         context: {
             pattern: 'XXX.XXX.XXX-XX'
@@ -34,7 +36,8 @@ export class BossDto {
     email: string;
 }
 
-export class BossSearchDto {
+export class BossResponseDto {
     name: string;
     email: string;
+    password: string;
 }

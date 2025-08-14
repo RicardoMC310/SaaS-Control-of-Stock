@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { BossModule } from './boss/boss.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -26,6 +28,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       }),
     }),
     BossModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
