@@ -13,6 +13,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe());
 
+  console.log(`Server is running on port: ${port}`);
   await app.listen(port);
 }
 bootstrap();
