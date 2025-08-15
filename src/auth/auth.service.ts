@@ -32,7 +32,8 @@ export class AuthService {
             payload = {
                 rules: "boss",
                 name: boss.name,
-                email: boss.email
+                email: boss.email,
+                id: boss.id
             };
 
         }

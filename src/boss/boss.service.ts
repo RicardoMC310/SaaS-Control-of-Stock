@@ -43,6 +43,10 @@ export class BossService {
         return this.bossRepository.save(newBoss);
     }
 
+    async findById(id: number): Promise<BossEntity | null> {
+        return await this.bossRepository.findOneBy({ id: id });
+    }
+
     async findByEmail(email: string): Promise<BossResponseDto | null> {
         const boss = await this.bossRepository.findOne({
             where: { email: email.trim().toLowerCase() }
@@ -53,6 +57,7 @@ export class BossService {
         }
 
         return {
+            id: boss?.id,
             name: boss?.name,
             email: boss?.email,
             password: boss?.password

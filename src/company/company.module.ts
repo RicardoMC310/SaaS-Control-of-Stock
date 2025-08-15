@@ -1,15 +1,16 @@
 import { Module } from '@nestjs/common';
-import { BossController } from './boss.controller';
-import { BossService } from './boss.service';
+import { CompanyController } from './company.controller';
+import { CompanyService } from './company.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { BossEntity } from 'src/entitys/boss.entity';
 import { CompanyEntity } from 'src/entitys/company.entity';
+import { BossEntity } from 'src/entitys/boss.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { BossModule } from 'src/boss/boss.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([BossEntity, CompanyEntity]),
+    TypeOrmModule.forFeature([CompanyEntity, BossEntity]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -18,9 +19,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         signOptions: { expiresIn: config.get<string>("JWT_EXPIRES_IN") }
       })
     }),
+    BossModule
   ],
-  controllers: [BossController],
-  providers: [BossService],
-  exports: [BossService]
+  controllers: [CompanyController],
+  providers: [CompanyService]
 })
-export class BossModule { }
+export class CompanyModule { }

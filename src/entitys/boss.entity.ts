@@ -1,5 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { CompanyEntity } from "./company.entity";
 @Entity('boss')
 export class BossEntity {
     @PrimaryGeneratedColumn()
@@ -16,4 +16,7 @@ export class BossEntity {
 
     @Column({ unique: true })
     email: string;
+
+    @OneToOne(() => CompanyEntity, (company) => company.boss, { onDelete: "CASCADE" })
+    company: CompanyEntity;
 };

@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsString, Matches } from "class-validator";
-import { IsCPF } from "src/utils/boss.validator";
+import { IsCPF } from "src/utils/typeDto.validator";
 
 export class BossDto {
     @IsNotEmpty()
@@ -40,4 +40,5 @@ export class BossResponseDto {
     name: string;
     email: string;
     password: string;
+    id: number;
 }

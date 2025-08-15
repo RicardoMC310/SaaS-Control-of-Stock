@@ -6,6 +6,7 @@ import { BossModule } from './boss/boss.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
+import { CompanyModule } from './company/company.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { JwtModule } from '@nestjs/jwt';
     }),
     BossModule,
     AuthModule,
+    CompanyModule,
   ],
   controllers: [AppController],
   providers: [AppService],
