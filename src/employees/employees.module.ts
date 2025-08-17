@@ -21,6 +21,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     BossModule
   ],
   controllers: [EmployeesController],
-  providers: [EmployeesService]
+  providers: [EmployeesService],
+  exports: [EmployeesService]
 })
 export class EmployeesModule { }

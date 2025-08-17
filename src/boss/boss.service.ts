@@ -59,7 +59,7 @@ export class BossService {
         });
 
         if (!boss) {
-            throw new NotFoundException("Boss not found with this email");
+            return null;
         }
 
         return {

@@ -4,6 +4,7 @@ import { CompanyEntity } from "./company.entity";
 import { BossEntity } from "./boss.entity";
 
 export enum EmployeesRules {
+    BOSS = "Boss",
     ADMIN = "Admin",
     SALESMAN = "Salesman",
     GUEST = "Guest"

@@ -1,12 +1,9 @@
-import { IsEnum, IsNotEmpty, IsNotIn, IsString, Matches } from "class-validator";
+import { IsNotEmpty, IsString, Matches } from "class-validator";
+import { IsCPF } from "src/utils/typeDto.validator";
 
 export class AuthResponseDTO {
     token: string;
     expiresIn: string;
-}
-
-export enum TypeOfLogin {
-    Boss = "Boss", Employees = "Employees"
 }
 
 export class AuthLoginDto {
@@ -21,13 +18,20 @@ export class AuthLoginDto {
     email: string;
 
     @IsNotEmpty()
-    @IsEnum(TypeOfLogin)
-    type: TypeOfLogin;
-
-    @IsNotEmpty()
     @IsString()
     @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[\d])(?=.*[!@#$%^&*()_\-+=\[\]{};:'",.<>/?\\|`~])(?!.*[\s]).{8,}$/, {
         message: 'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character'
     })
     password: string;
+
+    @IsNotEmpty()
+    @IsString()
+    @IsCPF()
+    @Matches(/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/, {
+        message: 'CPF must be in the format XXX.XXX.XXX-XX',
+        context: {
+            pattern: 'XXX.XXX.XXX-XX'
+        }
+    })
+    cpf: string;
 }

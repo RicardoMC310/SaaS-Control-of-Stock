@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsString, Matches, Min } from "class-validator";
+import { IsEnum, isNotEmpty, IsNotEmpty, IsNumber, IsString, Matches, Min } from "class-validator";
 import { EmployeesRules } from "src/entitys/employees.entity";
 import { IsCPF } from "src/utils/typeDto.validator";
 
@@ -41,4 +41,13 @@ export class EmployeesCreateDto {
     @IsEnum(EmployeesRules)
     rules: EmployeesRules;    
 
+}
+
+export class EmployeesResponseDto {
+    name: string;
+    cpf: string;
+    id: number;
+    rules: EmployeesRules;
+    email: string;
+    password: string;
 }
