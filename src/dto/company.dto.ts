@@ -5,7 +5,7 @@ import { IsCNPJ } from "src/utils/typeDto.validator";
 export class CompanyRequestDto {
     @IsNotEmpty()
     @IsString()
-    @Matches(/^[a-zA-Z0-9_]+$/, { message: "name can only contain letters a-z, A-Z, 0-9, and _" })
+    @Matches(/^[A-Za-z0-9_\.\s]+$/, { message: 'Name can only contain letters and spaces' })
     name: string;
 
     @IsNotEmpty()
@@ -18,11 +18,6 @@ export class CompanyRequestDto {
     })
     @IsCNPJ()
     cnpj: string;
-
-    @IsNotEmpty()
-    @IsNumber()
-    @Min(0)
-    boss_id: number;
 }
 
 export class CompanyGetDto {

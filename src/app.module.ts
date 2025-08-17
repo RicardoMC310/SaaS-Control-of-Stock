@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { CompanyModule } from './company/company.module';
+import { EmployeesModule } from './employees/employees.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { CompanyModule } from './company/company.module';
     BossModule,
     AuthModule,
     CompanyModule,
+    EmployeesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

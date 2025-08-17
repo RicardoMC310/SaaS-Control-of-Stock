@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Request, UseGuards } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { CompanyEntity } from 'src/entitys/company.entity';
@@ -13,8 +13,8 @@ export class CompanyController {
     @Post()
     @HttpCode(HttpStatus.CREATED)
     @UseGuards(AuthGuard)
-    async create(@Body() company: CompanyRequestDto): Promise<CompanyEntity> {
-        return await this.companyService.create(company);
+    async create(@Body() company: CompanyRequestDto, @Request() request): Promise<CompanyEntity> {
+        return await this.companyService.create(company, request["user"].id);
     }
 
     @Get()

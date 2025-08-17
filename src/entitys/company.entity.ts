@@ -1,5 +1,6 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { BossEntity } from "./boss.entity";
+import { EmployeesEntity } from "./employees.entity";
 
 @Entity("company")
 export class CompanyEntity {
@@ -18,4 +19,7 @@ export class CompanyEntity {
 
     @Column({ unique: true })
     cnpj: string;
+
+    @OneToMany(() => EmployeesEntity, (employees) => employees.company_id)
+    employees: EmployeesEntity[];
 }

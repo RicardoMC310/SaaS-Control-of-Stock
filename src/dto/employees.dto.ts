@@ -1,11 +1,23 @@
-import { IsNotEmpty, IsString, Matches } from "class-validator";
+import { IsEnum, IsNotEmpty, IsNumber, IsString, Matches, Min } from "class-validator";
+import { EmployeesRules } from "src/entitys/employees.entity";
 import { IsCPF } from "src/utils/typeDto.validator";
 
-export class BossDto {
+export class EmployeesCreateDto {
+
     @IsNotEmpty()
     @IsString()
     @Matches(/^[A-Za-z0-9_\.\s]+$/, { message: 'Name can only contain letters and spaces' })
     name: string;
+
+    @IsNotEmpty()
+    @IsString()
+    @Matches(/^[^\s@]+@[a-zA-Z0-9]+(\.+[a-zA-Z]{2,})$/, {
+        message: 'Email must be a valid email address',
+        context: {
+            pattern: 'exemplo@gmail.com'
+        }
+    })
+    email: string;
 
     @IsNotEmpty()
     @IsString()
@@ -26,20 +38,7 @@ export class BossDto {
     cpf: string;
 
     @IsNotEmpty()
-    @IsString()
-    @Matches(/^[^\s@]+@[a-zA-Z0-9]+(\.+[a-zA-Z]{2,})$/, {
-        message: 'Email must be a valid email address',
-        context: {
-            pattern: 'exemplo@gmail.com'
-        }
-    })
-    email: string;
-}
+    @IsEnum(EmployeesRules)
+    rules: EmployeesRules;    
 
-export class BossResponseDto {
-    name: string;
-    email: string;
-    password: string;
-    cpf: string;
-    id: number;
 }

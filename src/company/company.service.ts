@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BossService } from 'src/boss/boss.service';
 import { CompanyGetDto, CompanyRequestDto } from 'src/dto/company.dto';
-import { createHashCnpj, extractCnpjToHash } from 'src/utils/cripted.hash';
+import { createHashJWE, extractJWEToHash } from 'src/utils/cripted.hash';
 import { CompanyEntity } from 'src/entitys/company.entity';
 import { Repository } from 'typeorm';
 
@@ -18,11 +18,11 @@ export class CompanyService {
 
     
 
-    async create(company: CompanyRequestDto): Promise<CompanyEntity> {
+    async create(company: CompanyRequestDto, boss_id: number): Promise<CompanyEntity> {
         const secret = this.configService.get<string>("SECRET_KEY");
 
         const foundCompany = await this.companyRepository.findOne({
-            where: [{ cnpj: await createHashCnpj(company.cnpj, secret??""), name: company.name }]
+            where: [{ cnpj: await createHashJWE(company.cnpj, secret??""), name: company.name }]
         })
 
         if (foundCompany) {
@@ -31,13 +31,13 @@ export class CompanyService {
 
         const newCompany = this.companyRepository.create(company);
 
-        const boss = await this.bossService.findById(company.boss_id);
+        const boss = await this.bossService.findById(boss_id);
 
         if (!boss) throw new NotFoundException("Boss id not found!");
 
         newCompany.created_at = new Date();
         newCompany.boss = boss;
-        newCompany.cnpj = await createHashCnpj(company.cnpj, secret??"");
+        newCompany.cnpj = await createHashJWE(company.cnpj, secret??"");
 
         return await this.companyRepository.save(newCompany);
     }
@@ -55,7 +55,7 @@ export class CompanyService {
         return {
             id: foundCompany.id,
             name: foundCompany.name,
-            cnpj: await extractCnpjToHash(foundCompany.cnpj, secret??""),
+            cnpj: await extractJWEToHash(foundCompany.cnpj, secret??""),
             created_at: foundCompany.created_at,
             boss: foundCompany.boss,
         };

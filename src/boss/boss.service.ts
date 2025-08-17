@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { createHash } from 'crypto';
 import { hashSync } from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
+import { createHashJWE, extractJWEToHash } from 'src/utils/cripted.hash';
 
 @Injectable()
 export class BossService {
@@ -15,19 +16,15 @@ export class BossService {
         private readonly configService: ConfigService
     ) { }
 
-    createhashCpf(cpf: string): string {
+    async create(boss: BossDto): Promise<BossEntity> {
         const secret = this.configService.get<string>('SECRET_KEY');
+
         if (!secret) {
             throw new BadGatewayException('Secret key not found');
         }
-        return createHash('sha256')
-            .update(cpf + secret)
-            .digest('hex');
-    }
 
-    async create(boss: BossDto): Promise<BossEntity> {
         const existingBoss = await this.bossRepository.findOne({
-            where: [{ cpf: this.createhashCpf(boss.cpf) }, { email: boss.email }]
+            where: [{ cpf: await createHashJWE(boss.cpf, secret) }, { email: boss.email }]
         });
 
         if (existingBoss) {
@@ -36,7 +33,7 @@ export class BossService {
 
         const newBoss = this.bossRepository.create({
             ...boss,
-            cpf: this.createhashCpf(boss.cpf),
+            cpf: await createHashJWE(boss.cpf, secret),
             password: hashSync(boss.password, 14)
         });
 
@@ -44,10 +41,19 @@ export class BossService {
     }
 
     async findById(id: number): Promise<BossEntity | null> {
-        return await this.bossRepository.findOneBy({ id: id });
+        return await this.bossRepository.findOne({
+            where: { id },
+            relations: ["company"], // carrega a relação
+        });
     }
 
     async findByEmail(email: string): Promise<BossResponseDto | null> {
+        const secret = this.configService.get<string>('SECRET_KEY');
+
+        if (!secret) {
+            throw new BadGatewayException('Secret key not found');
+        }
+
         const boss = await this.bossRepository.findOne({
             where: { email: email.trim().toLowerCase() }
         });
@@ -60,7 +66,8 @@ export class BossService {
             id: boss?.id,
             name: boss?.name,
             email: boss?.email,
-            password: boss?.password
+            password: boss?.password,
+            cpf: await extractJWEToHash(boss?.cpf, secret)
         };
     }
 }
