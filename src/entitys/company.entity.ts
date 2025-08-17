@@ -15,4 +15,7 @@ export class CompanyEntity {
 
     @Column({type: "timestamp"})
     created_at: Date;
+
+    @Column({ unique: true })
+    cnpj: string;
 }
