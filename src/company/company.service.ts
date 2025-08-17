@@ -1,9 +1,9 @@
 import { BadGatewayException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { createHash } from 'crypto';
 import { BossService } from 'src/boss/boss.service';
-import { CompanyRequestDto } from 'src/dto/company.dto';
+import { CompanyGetDto, CompanyRequestDto } from 'src/dto/company.dto';
+import { createHashCnpj, extractCnpjToHash } from 'src/utils/cripted.hash';
 import { CompanyEntity } from 'src/entitys/company.entity';
 import { Repository } from 'typeorm';
 
@@ -16,19 +16,13 @@ export class CompanyService {
         private readonly configService: ConfigService
     ) { }
 
-    createHashCnpj(cnpj: string): string {
-        const secret: string | undefined = this.configService.get<string>("SECRET_KEY");
-
-        if (!secret) {
-            throw new BadGatewayException('Secret key not found');
-        }
-
-        return createHash("sha256").update(secret + cnpj).digest("hex");
-    }
+    
 
     async create(company: CompanyRequestDto): Promise<CompanyEntity> {
+        const secret = this.configService.get<string>("SECRET_KEY");
+
         const foundCompany = await this.companyRepository.findOne({
-            where: [{ cnpj: this.createHashCnpj(company.cnpj), name: company.name }]
+            where: [{ cnpj: await createHashCnpj(company.cnpj, secret??""), name: company.name }]
         })
 
         if (foundCompany) {
@@ -43,8 +37,28 @@ export class CompanyService {
 
         newCompany.created_at = new Date();
         newCompany.boss = boss;
-        newCompany.cnpj = this.createHashCnpj(company.cnpj);
+        newCompany.cnpj = await createHashCnpj(company.cnpj, secret??"");
 
         return await this.companyRepository.save(newCompany);
     }
+
+    async foundByName(name: string): Promise<CompanyGetDto> {
+        const secret = this.configService.get<string>("SECRET_KEY");
+
+        const foundCompany = await this.companyRepository.findOne({
+            where: { name },
+            relations: ["boss"], // garante que boss seja carregado
+        });
+
+        if (!foundCompany) throw new NotFoundException("Company not found");
+
+        return {
+            id: foundCompany.id,
+            name: foundCompany.name,
+            cnpj: await extractCnpjToHash(foundCompany.cnpj, secret??""),
+            created_at: foundCompany.created_at,
+            boss: foundCompany.boss,
+        };
+    }
+
 }

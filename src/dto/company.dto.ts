@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsNumber, IsString, Matches, Min } from "class-validator";
+import { BossEntity } from "src/entitys/boss.entity";
 import { IsCNPJ } from "src/utils/typeDto.validator";
 
 export class CompanyRequestDto {
@@ -22,4 +23,12 @@ export class CompanyRequestDto {
     @IsNumber()
     @Min(0)
     boss_id: number;
+}
+
+export class CompanyGetDto {
+    name: string;
+    boss: BossEntity;
+    cnpj: string;
+    created_at: Date;
+    id: number;
 }
