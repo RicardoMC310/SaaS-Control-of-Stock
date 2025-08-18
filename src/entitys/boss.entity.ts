@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CompanyEntity } from "./company.entity";
-import { EmployeesEntity } from "./employees.entity";
+import { EmployeesEntity, EmployeesRules } from "./employees.entity";
 @Entity('boss')
 export class BossEntity {
     @PrimaryGeneratedColumn()
@@ -8,6 +8,9 @@ export class BossEntity {
 
     @Column()
     name: string;
+
+    @Column({ enum: EmployeesRules, default: EmployeesRules.BOSS })
+    rules: EmployeesRules;
 
     @Column()
     password: string;

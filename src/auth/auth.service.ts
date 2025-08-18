@@ -45,7 +45,7 @@ export class AuthService {
             name: loginUser?.name,
             cpf: loginUser?.cpf,
             email: loginUser?.email,
-            rules: loginUser?.rules??EmployeesRules.BOSS
+            rules: loginUser?.rules
         });
 
         return {

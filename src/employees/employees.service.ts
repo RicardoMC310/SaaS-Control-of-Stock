@@ -52,6 +52,10 @@ export class EmployeesService {
         return await this.employeesRepository.save(newUser);
     }
 
+    async deleteEmployees(id: number) {
+        await this.employeesRepository.delete({id: id});
+    }
+
     async findByEmail(email: string): Promise<EmployeesResponseDto| null> {
         const secret = this.configService.get<string>("SECRET_KEY");
 
