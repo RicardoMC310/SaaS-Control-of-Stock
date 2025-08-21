@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { BossController } from './boss.controller';
 import { BossService } from './boss.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -6,9 +6,11 @@ import { BossEntity } from 'src/entitys/boss.entity';
 import { CompanyEntity } from 'src/entitys/company.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { EmployeesModule } from 'src/employees/employees.module';
 
 @Module({
   imports: [
+    forwardRef(() => EmployeesModule),
     TypeOrmModule.forFeature([BossEntity, CompanyEntity]),
     JwtModule.registerAsync({
       imports: [ConfigModule],

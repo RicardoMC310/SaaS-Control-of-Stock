@@ -3,17 +3,19 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BossDto, BossResponseDto } from 'src/dto/boss.dto';
 import { BossEntity } from 'src/entitys/boss.entity';
 import { Repository } from 'typeorm';
-import { createHash } from 'crypto';
 import { hashSync } from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { createHashJWE, extractJWEToHash } from 'src/utils/cripted.hash';
+import { EmployeesService } from 'src/employees/employees.service';
+import { EmployeesResponseDto } from 'src/dto/employees.dto';
 
 @Injectable()
 export class BossService {
     constructor(
         @InjectRepository(BossEntity)
         private readonly bossRepository: Repository<BossEntity>,
-        private readonly configService: ConfigService
+        private readonly configService: ConfigService,
+        private readonly employeesService: EmployeesService
     ) { }
 
     async create(boss: BossDto): Promise<BossEntity> {
@@ -26,6 +28,18 @@ export class BossService {
         const existingBoss = await this.bossRepository.findOne({
             where: [{ cpf: await createHashJWE(boss.cpf, secret) }, { email: boss.email }]
         });
+
+        const existingUser: EmployeesResponseDto | null = await this.employeesService.findByEmail(boss.email);
+
+        if (existingUser) {
+            // Lança exceção ou processa
+            if (existingUser.cpf === existingBoss?.cpf) {
+                throw new BadGatewayException("User already exist!");
+            }
+
+            throw new BadGatewayException("User already exist!");
+        }
+
 
         if (existingBoss) {
             throw new BadGatewayException('Boss with this CPF or email already exists');

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { EmployeesController } from './employees.controller';
 import { EmployeesService } from './employees.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -18,7 +18,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         signOptions: { expiresIn: config.get<string>("JWT_EXPIRES_IN") }
       })
     }),
-    BossModule
+    forwardRef(() => BossModule),
   ],
   controllers: [EmployeesController],
   providers: [EmployeesService],

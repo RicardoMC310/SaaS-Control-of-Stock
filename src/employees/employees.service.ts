@@ -1,4 +1,4 @@
-import { BadGatewayException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadGatewayException, forwardRef, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { hash, hashSync } from 'bcrypt';
@@ -14,6 +14,7 @@ export class EmployeesService {
     constructor(
         @InjectRepository(EmployeesEntity)
         private readonly employeesRepository: Repository<EmployeesEntity>,
+        @Inject(forwardRef(() => BossService))
         private readonly bossService: BossService,
         private readonly configService: ConfigService
     ) { }
@@ -48,6 +49,12 @@ export class EmployeesService {
         newUser.name = user.name;
         newUser.password = hashSync(user.password, 14);
         newUser.rules = user.rules;
+
+        if (newUser.cpf === bossFound.cpf || 
+            newUser.email === bossFound.email
+        ) {
+            throw new BadGatewayException("User already exists!");
+        }
 
         return await this.employeesRepository.save(newUser);
     }

@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { CompanyModule } from './company/company.module';
 import { EmployeesModule } from './employees/employees.module';
+import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { EmployeesModule } from './employees/employees.module';
     AuthModule,
     CompanyModule,
     EmployeesModule,
+    ProductModule,
   ],
   controllers: [AppController],
   providers: [AppService],
