@@ -43,6 +43,8 @@
     "removeComments": true,
     "lib": ["ESNext", "DOM"],
     "noEmitOnError": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipDefaultLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   }
 }
