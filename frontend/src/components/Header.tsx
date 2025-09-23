@@ -14,7 +14,8 @@ export default function Header() {
     const { setTheme } = useTheme()
 
     return (
-        <div className="flex flex-wrap justify-between items-center flex-row p-8 border-b relative">
+        <div className="flex flex-wrap justify-between items-start flex-row p-8 border-b relative">
+
             <h1 className="text-4xl">JafCar</h1>
 
             <div className="flex flex-row justify-around p-2 items-center space-x-2">
