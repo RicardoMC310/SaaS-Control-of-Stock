@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/RicardoMC310/SaaS-Control-Of-Stock/utils"
-	"gorm.io/gorm"
 	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 func Connect() (*gorm.DB, error) {

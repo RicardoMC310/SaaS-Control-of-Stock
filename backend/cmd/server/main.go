@@ -15,8 +15,10 @@ func main() {
 	router := gin.Default()
 
 	router.GET("/healthy", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, gin.H{"sucess": true})
+		ctx.JSON(http.StatusOK, gin.H{"sucess": true, "message": "API response correctly"})
 	})
+
+	UserRouter(router)
 
 	port, err := utils.GetEnv("PORT")
 	if err != nil || port == "" {

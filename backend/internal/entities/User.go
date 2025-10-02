@@ -10,9 +10,9 @@ import (
 )
 
 type User struct {
-	ID    uint   `json:"id" gorm:"primaryKey;autoIncrement"`
-	Name  string `json:"name" gorm:"size:50;not null"`
-	Email string `json:"email" gorm:"not null"`
+	ID       uint   `json:"id" gorm:"primaryKey;autoIncrement"`
+	Name     string `json:"name" gorm:"size:50;not null"`
+	Email    string `json:"email" gorm:"not null;indexUnique"`
 	Password string `json:"-" gorm:"not null"`
 }
 
@@ -52,8 +52,4 @@ func (u *User) IsValid() error {
 	}
 
 	return nil
-}
-
-func NewUserEntity() *User {
-	return &User{}
 }
