@@ -20,6 +20,17 @@ func (u *userPostgresRepository) Save(user *entities.User) error {
 	return nil
 }
 
+func (u *userPostgresRepository) FindByEmail(email string) (*entities.User, error) {
+	var user entities.User
+
+	err := u.db.Where("email = ?", email).First(&user)
+	if err.Error != nil {
+		return nil, err.Error
+	}
+
+	return &user, nil
+}
+
 func NewUserPostgresRepository(data ...interface{}) *userPostgresRepository {
 
 	db, err := connection.Connect()

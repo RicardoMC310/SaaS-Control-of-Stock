@@ -12,8 +12,8 @@ import (
 type User struct {
 	ID       uint   `json:"id" gorm:"primaryKey;autoIncrement"`
 	Name     string `json:"name" gorm:"size:50;not null"`
-	Email    string `json:"email" gorm:"not null;indexUnique"`
-	Password string `json:"-" gorm:"not null"`
+	Email    string `json:"email" gorm:"not null;indexUnique;unique"`
+	Password string `json:"password" gorm:"not null"`
 }
 
 func getEntropyMinimum() (float64, error) {

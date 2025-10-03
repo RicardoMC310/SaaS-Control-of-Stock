@@ -19,6 +19,7 @@ func main() {
 	})
 
 	UserRouter(router)
+	AuthRouter(router)
 
 	port, err := utils.GetEnv("PORT")
 	if err != nil || port == "" {

@@ -1,11 +1,11 @@
-package controllers
+package userControllers
 
 import (
 	"net/http"
 
 	"github.com/RicardoMC310/SaaS-Control-Of-Stock/internal/entities"
 	"github.com/RicardoMC310/SaaS-Control-Of-Stock/internal/repositories"
-	"github.com/RicardoMC310/SaaS-Control-Of-Stock/internal/services"
+	"github.com/RicardoMC310/SaaS-Control-Of-Stock/internal/services/user"
 	"github.com/gin-gonic/gin"
 )
 
