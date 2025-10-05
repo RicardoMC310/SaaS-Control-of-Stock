@@ -5,12 +5,14 @@ import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader,
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { useAuth } from "@/lib/authContext";
 import Link from "next/link";
 import { FormEvent } from "react";
 
 export default function Form() {
+    const {register} = useAuth();
 
-    const handlerRegisterSubmit = (event: FormEvent<HTMLFormElement>) => {
+    const handlerRegisterSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         
         const formData: FormData = new FormData(event.currentTarget);
@@ -19,7 +21,12 @@ export default function Form() {
         const email: string = formData.get("email") as string ?? "";
         const password: string = formData.get("password") as string ?? "";
 
-        console.log("> Register com o usuário: ", {name, email, password});
+        try {
+            await register({name, email, password});
+            alert("logado com sucesso!");
+        }catch(error) {
+            alert(error);
+        }
     };
 
     return (

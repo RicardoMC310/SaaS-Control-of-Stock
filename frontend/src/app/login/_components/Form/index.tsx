@@ -5,13 +5,30 @@ import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader,
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { useAuth } from "@/lib/authContext";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FormEvent } from "react";
 
 export default function Form() {
+    
+    const { login } = useAuth();
+    const router = useRouter();
 
-    const handlerLoginSubmit = (event: FormEvent<HTMLFormElement>) => {
+    const handlerLoginSubmit = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
+        const formData: FormData = new FormData(event.currentTarget);
+
+        const email: string = formData.get("email") as string ?? "";
+        const password: string = formData.get("password") as string ?? "";
+
+        try {
+            await login({email, password});
+            router.push("/");
+        }catch(error) {
+            alert(error);
+        }
     };
 
     return (
@@ -35,7 +52,7 @@ export default function Form() {
                         <Input name="email" className="col-span-3" type="email" required />
 
                         <Label className="col-span-1">Password</Label>
-                        <Input name="password" className="col-span-3" type="text" required />
+                        <Input name="password" className="col-span-3" type="password" required />
                     </div>
 
                 </CardContent>

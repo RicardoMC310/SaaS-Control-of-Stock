@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/header";
+import { AuthProvider } from "@/lib/authContext";
 
 export const metadata: Metadata = {
   title: "SaaS - Controle de Estoque",
@@ -17,8 +18,10 @@ export default function RootLayout({
       <body
         className="antialiased dark"
       >
-        <Header />
-        {children}
+        <AuthProvider>
+          <Header />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

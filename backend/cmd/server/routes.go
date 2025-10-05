@@ -13,7 +13,7 @@ func UserRouter(router *gin.Engine) {
 
 	repo := repositories.NewUserPostgresRepository(&entities.User{})
 
-	userRouterGroup.POST("/", func(ctx *gin.Context) {
+	userRouterGroup.POST("", func(ctx *gin.Context) {
 		controllers.UserCreateController(ctx, repo)
 	})
 
