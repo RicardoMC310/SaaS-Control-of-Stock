@@ -1,23 +1,17 @@
 import express, { type Router, type Request, type Response } from "express";
-import createUserEntity from "../entities/user.entity";
+import { UserDTO } from "../DTOs/user.dto";
+import { UserEntity } from "../entities/user.entity";
+import { IUserRepository } from "../repositories/user.repositories";
+import createUserPostgresRepository from "../repositories/user.postgres-repository";
+import { createUserService } from "../services/user.service";
 
 const USER_ROUTER: Router = express.Router();
+const REPOSITORY: IUserRepository = createUserPostgresRepository();
+const SERVICE =  createUserService(REPOSITORY);
 
-interface UserDTO {
-    id: number;
-    name: string;
-    email: string;
-    password: string;
-}
-
-USER_ROUTER.post("/", (req: Request, res: Response) => {
-
+USER_ROUTER.post("/", async (req: Request, res: Response) => {
     try {
-        let user = createUserEntity();
-
-        let userDTO: UserDTO = req.body;
-
-        user.setNameEmailPasswordFields(userDTO.id, userDTO.name, userDTO.email, userDTO.password);
+        const user = await SERVICE.createNewUser(req.body);
 
         res.status(200).json({
             "sucess": true,

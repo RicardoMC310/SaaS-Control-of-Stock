@@ -1,6 +1,5 @@
 import APP from "./app";
 import { config as configDotEnv } from "dotenv";
-
 configDotEnv();
 
 const PORT: number = parseInt(process.env?.SERVER_PORT || "3303");
