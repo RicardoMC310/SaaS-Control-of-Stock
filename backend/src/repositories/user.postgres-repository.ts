@@ -1,50 +1,46 @@
 import prisma from "../prisma";
 import { UserEntity } from "../entities/user.entity";
 import { IUserRepository } from "./user.repositories";
-import { Prisma } from "../generated/prisma/client";
+import handleErrorsPrisma from "../utils/HandlingErrorsPrisma";
+import { AppError, mapErrorToStatus } from "../utils/APIError";
 
 class UserPostgresRepository implements IUserRepository {
     public async Save(user: UserEntity): Promise<UserEntity> {
-        return await this.SaveUserIntoDataBase(user.getAllFields());
-    }
-
-    private async SaveUserIntoDataBase(user: { name: string, email: string, passwordHash: string }): Promise<UserEntity> {
+        const { name, email, passwordHash } = user.getAllFields();
         let userData;
 
         try {
             userData = await prisma.user.create({
-                data: { ...user }
+                data: { name, email, passwordHash }
             });
         } catch (error) {
-            const messageError: string = this.handleErrorsPrisma(error);
-            throw new Error(messageError);
+            handleErrorsPrisma(error);
         }
 
         return Object.assign(new UserEntity, userData);
     }
 
-    private handleErrorsPrisma(err: unknown): string {
-        if (err instanceof Prisma.PrismaClientKnownRequestError) {
-            // Erros conhecidos, como unique constraint
-            if (err.code === "P2002") {
-                const fields = (err.meta?.target as string[]).join(", ");
-                return `Já existe um registro com o(s) campo(s): ${fields}`;
-            }
-            return `Erro no banco de dados: ${err.message}`;
+    public async FindByEmail(email: string): Promise<UserEntity> {
+        let userData;
+
+        try {
+            userData = await prisma.user.findUnique({
+                where: {email},
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                }
+            });
+
+            if (!userData)
+                throw new AppError("Email não cadastrado no sistema", mapErrorToStatus("NOT_FOUND"));
+
+        } catch (error) {
+            handleErrorsPrisma(error);
         }
 
-        if (err instanceof Prisma.PrismaClientValidationError) {
-            return `Erro de validação: ${err.message}`;
-        }
-
-        if (err instanceof Prisma.PrismaClientUnknownRequestError) {
-            return `Erro desconhecido do Prisma: ${err.message}`;
-        }
-
-        // Qualquer outro erro genérico
-        if (err instanceof Error) return err.message;
-
-        return "Ocorreu um erro inesperado";
+        return Object.assign(new UserEntity(), userData);
     }
 }
 

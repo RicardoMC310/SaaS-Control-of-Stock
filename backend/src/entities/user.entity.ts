@@ -1,7 +1,7 @@
 import { Email } from "../utils/Email";
 import { Name } from "../utils/Name";
 import { Password } from "../utils/Password";
-import { UserDTO } from "../DTOs/user.dto";
+import { CreateUserDTO } from "../DTOs/user.dto";
 
 export class UserEntity {
     private id: number = 0;
@@ -9,7 +9,7 @@ export class UserEntity {
     private email?: Email;
     private passwordHash?: Password;
 
-    public setFieldsWithUserDTO(userDTO: UserDTO) {
+    public setFieldsWithUserDTO(userDTO: CreateUserDTO) {
         this.name = new Name(userDTO.name);
         this.email = new Email(userDTO.email);
         this.passwordHash = new Password(userDTO.password);
