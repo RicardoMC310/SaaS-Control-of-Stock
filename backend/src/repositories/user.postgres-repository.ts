@@ -2,7 +2,7 @@ import prisma from "../prisma";
 import { UserEntity } from "../entities/user.entity";
 import { IUserRepository } from "./user.repositories";
 import handleErrorsPrisma from "../utils/HandlingErrorsPrisma";
-import { AppError, mapErrorToStatus } from "../utils/APIError";
+import { AppError, mapStatusCodeByName } from "../utils/APIError";
 
 class UserPostgresRepository implements IUserRepository {
     public async Save(user: UserEntity): Promise<UserEntity> {
@@ -35,7 +35,7 @@ class UserPostgresRepository implements IUserRepository {
             });
 
             if (!userData)
-                throw new AppError("Email não cadastrado no sistema", mapErrorToStatus("NOT_FOUND"));
+                throw new AppError("Email não cadastrado no sistema", mapStatusCodeByName("NOT_FOUND"));
 
         } catch (error) {
             handleErrorsPrisma(error);

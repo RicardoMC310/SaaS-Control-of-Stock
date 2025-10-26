@@ -1,13 +1,13 @@
 import z from "zod";
 
 const createUserScheme = z.object({
-    name: z.string().min(3, "mínimo de 3 caracteres para um nome!"),
-    email: z.string().min(9, "digite um email válido"),
-    password: z.string().min(8, "senha de no mínimo 8 dígitos")
+    name: z.string(),
+    email: z.string(),
+    password: z.string()
 });
 
 const findUserByEmailScheme = z.object({
-    email: z.string().min(9, "digite um email válido"),
+    email: z.string()
 });
 
 export type CreateUserDTO = z.infer<typeof createUserScheme>;

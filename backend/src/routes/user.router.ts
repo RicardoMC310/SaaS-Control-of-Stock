@@ -3,7 +3,7 @@ import { IUserRepository } from "../repositories/user.repositories";
 import createUserPostgresRepository from "../repositories/user.postgres-repository";
 import UserService from "../services/user.service";
 import { UserEntity } from "../entities/user.entity";
-import { returnErrorAPI } from "../utils/APIError";
+import { mapStatusCodeByName, returnErrorAPI, returnAPI } from "../utils/APIError";
 
 const USER_ROUTER: Router = express.Router();
 const REPOSITORY: IUserRepository = createUserPostgresRepository();
@@ -13,10 +13,7 @@ USER_ROUTER.post("/", async (req: Request, res: Response) => {
     try {
         const user: UserEntity = await SERVICE.createNewUser(req.body);
 
-        res.status(200).json({
-            "sucess": true,
-            "message": user
-        });
+        returnAPI(res, mapStatusCodeByName("CREATED"), user);
     } catch (error) {
         returnErrorAPI(res, error);
     }

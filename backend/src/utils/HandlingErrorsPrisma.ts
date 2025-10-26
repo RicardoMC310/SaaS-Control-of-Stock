@@ -1,5 +1,5 @@
 import { Prisma } from "../generated/prisma/client";
-import { AppError, getStatusAndMessageInPrismaErrors, mapErrorToStatus } from "./APIError";
+import { AppError, getStatusAndMessageInPrismaErrors, mapStatusCodeByName } from "./APIError";
 
 
 export default function handleErrorsPrisma(err: unknown): string {
@@ -17,14 +17,14 @@ export default function handleErrorsPrisma(err: unknown): string {
     }
 
     if (err instanceof Prisma.PrismaClientValidationError) {
-        throw new AppError(`Erro de validação: ${err.message}`, mapErrorToStatus("BAD_GATEWAY"));
+        throw new AppError(`Erro de validação: ${err.message}`, mapStatusCodeByName("BAD_GATEWAY"));
     }
 
     if (err instanceof Prisma.PrismaClientUnknownRequestError) {
-        throw new AppError(`Erro desconhecido do prisma: ${err.message}`, mapErrorToStatus("BAD_GATEWAY"));
+        throw new AppError(`Erro desconhecido do prisma: ${err.message}`, mapStatusCodeByName("BAD_GATEWAY"));
     }
 
-    if (err instanceof Error) throw new AppError(err.message, mapErrorToStatus("INTERNAL_ERROR"));
+    if (err instanceof Error) throw new AppError(err.message, mapStatusCodeByName("INTERNAL_ERROR"));
 
-    throw new AppError("Erro inesperado aconteceu", mapErrorToStatus("INTERNAL_ERROR"));
+    throw new AppError("Erro inesperado aconteceu", mapStatusCodeByName("INTERNAL_ERROR"));
 }

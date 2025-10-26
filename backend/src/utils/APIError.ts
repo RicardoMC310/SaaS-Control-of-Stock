@@ -11,6 +11,11 @@ const errorsToStatus: Record<string, number> = {
     BAD_REQUEST: 400,
     INTERNAL_ERROR: 500,
     BAD_GATEWAY: 502,
+    UNAUTHORIZED: 401,
+
+    CREATED: 201,
+    FOUND: 302,
+    SUCESS: 200,
 
     P2025: 404,
     P2002: 400
@@ -18,15 +23,22 @@ const errorsToStatus: Record<string, number> = {
 
 export { knownPrismaErrors }
 
-export function mapErrorToStatus(code: string): number {
+export function mapStatusCodeByName(code: string): number {
     return errorsToStatus[code] ?? 500;
 }
 
 export function getStatusAndMessageInPrismaErrors(code: string): { code: number, message: string } {
     return {
-        code: mapErrorToStatus(code),
+        code: mapStatusCodeByName(code),
         message: knownPrismaErrors[code]
     }
+}
+
+export function returnAPI(res: Response, statusCode: number, message: Object) {
+    res.status(statusCode).json({
+        "sucess": true,
+        "message": message
+    });
 }
 
 export function returnErrorAPI(res: Response, error: unknown) {
