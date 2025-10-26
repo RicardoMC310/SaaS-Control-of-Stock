@@ -10,12 +10,21 @@ export class Password {
         this.isValid(password);
         
         this.value = password;
-        this.cryptographValue();
     }
 
-    public comparePasswordWithHash(password: Password): boolean
+    public comparePasswordWithHash(password: string): boolean
     {
-        return bcryptCompareSync(String(password), this.value);
+        return bcryptCompareSync(password, this.value);
+    }
+
+    public cryptographValue() {
+        this.value = bcryptHashSync(this.value, this.DEFAULT_ROUNDS_BCRYPT);
+    }
+
+    public static fromHash(hash: string): Password {
+        const instance = Object.create(Password.prototype);
+        instance.value = hash;
+        return instance;
     }
 
     private isValid(password: string) {
@@ -30,10 +39,6 @@ export class Password {
         if (!(score == this.PASSWORD_ALL_CRITERIA)) {
             throw new Error("senha fraca, deve conter: 1 maiúscola, 1 minúscula, 1 número, 1 caracter especial e no mínimo 8 caracteres");
         }
-    }
-
-    private cryptographValue() {
-        this.value = bcryptHashSync(this.value, this.DEFAULT_ROUNDS_BCRYPT);
     }
 
     public toString(): string {

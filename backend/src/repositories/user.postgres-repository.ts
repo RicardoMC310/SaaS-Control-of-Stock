@@ -6,7 +6,7 @@ import { AppError, mapErrorToStatus } from "../utils/APIError";
 
 class UserPostgresRepository implements IUserRepository {
     public async Save(user: UserEntity): Promise<UserEntity> {
-        const { name, email, passwordHash } = user.getAllFields();
+        const { name, email, passwordHash } = user.getAllValueFields();
         let userData;
 
         try {
@@ -30,6 +30,7 @@ class UserPostgresRepository implements IUserRepository {
                     id: true,
                     name: true,
                     email: true,
+                    passwordHash: true
                 }
             });
 

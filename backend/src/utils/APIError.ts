@@ -1,3 +1,5 @@
+import {type Response} from "express";
+
 const knownPrismaErrors: Record<string, string> = {
     P2002: "Já existe um registro com o(s) campo(s): ",
     P2025: "Registro não encontrado.",
@@ -25,6 +27,19 @@ export function getStatusAndMessageInPrismaErrors(code: string): { code: number,
         code: mapErrorToStatus(code),
         message: knownPrismaErrors[code]
     }
+}
+
+export function returnErrorAPI(res: Response, error: unknown) {
+
+    const statusCode: number = error instanceof AppError ?
+        error.code : 500;
+    const message: string = error instanceof Error || error instanceof AppError ?
+        error.message : String(error);
+
+    res.status(statusCode).json({
+        "sucess": false,
+        "message": message
+    });
 }
 
 export class AppError extends Error {

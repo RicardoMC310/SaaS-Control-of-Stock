@@ -2,7 +2,7 @@ import { CreateUserDTO, FindUserByEmailDTO } from "../DTOs/user.dto";
 import { UserEntity } from "../entities/user.entity";
 import { IUserRepository } from "../repositories/user.repositories";
 
-class UserService {
+export default class UserService {
     constructor(private readonly repository: IUserRepository) {}
 
     public async createNewUser(userDTO: CreateUserDTO): Promise<UserEntity> {
@@ -17,7 +17,3 @@ class UserService {
         return await this.repository.FindByEmail(email);
     }
 };
-
-export function createUserService(repository: IUserRepository): UserService {
-    return new UserService(repository);
-}
