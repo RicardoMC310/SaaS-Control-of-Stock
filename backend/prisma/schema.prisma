@@ -29,7 +29,7 @@ model Product {
   name          String
   quantity      Int
   purchasePrice Decimal
-  salePrice     Decimal
+  salesPrice     Decimal
   code          String
   minQuantity   Int
   

@@ -8,7 +8,7 @@ export default class UserService {
     public async createNewUser(userDTO: CreateUserDTO): Promise<UserEntity> {
         const user = new UserEntity();
 
-        user.setFieldsWithUserDTO(userDTO);
+        user.setFieldsWithCreateUserDTO(userDTO);
 
         return this.repository.Save(user);
     }

@@ -2,6 +2,7 @@ import express, { type Router, type Request, type Response } from "express";
 import USER_ROUTER from "./user.router";
 import AUTH_ROUTER from "./auth.router";
 import { HttpStatus, mapStatusCodeByName, returnAPI } from "../utils/APIError";
+import PRODUCT_ROUTER from "./product.router";
 
 const ROUTER: Router = express.Router();
 
@@ -11,5 +12,6 @@ ROUTER.get("/healthy", (_req: Request, res: Response) => {
 
 ROUTER.use("/user", USER_ROUTER);
 ROUTER.use("/auth", AUTH_ROUTER);
+ROUTER.use("/product", PRODUCT_ROUTER);
 
 export default ROUTER;

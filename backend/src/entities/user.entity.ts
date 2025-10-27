@@ -10,7 +10,7 @@ export class UserEntity {
     private passwordHash?: Password;
     private createdAt?: Date;
 
-    public setFieldsWithUserDTO(userDTO: CreateUserDTO) {
+    public setFieldsWithCreateUserDTO(userDTO: CreateUserDTO) {
         this.name = new Name(userDTO.name);
         this.email = new Email(userDTO.email);
         this.passwordHash = new Password(userDTO.password);
