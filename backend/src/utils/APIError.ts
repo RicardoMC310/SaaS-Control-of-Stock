@@ -53,7 +53,7 @@ export function getStatusAndMessageInPrismaErrors(code: string): { code: number,
 export function returnAPI(res: Response, statusCode: number, message: Object) {
     res.status(statusCode).json({
         "sucess": true,
-        "message": message
+        "message": message,
     });
 }
 
@@ -64,10 +64,7 @@ export function returnErrorAPI(res: Response, error: unknown) {
     const message: string = error instanceof Error || error instanceof AppError ?
         error.message : String(error);
 
-    res.status(statusCode).json({
-        "sucess": false,
-        "message": message
-    });
+    returnAPI(res, statusCode, message);
 }
 
 export class AppError extends Error {
