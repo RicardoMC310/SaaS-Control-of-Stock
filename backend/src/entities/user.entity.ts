@@ -1,6 +1,6 @@
-import { Email } from "../utils/Email";
-import { Name } from "../utils/Name";
-import { Password } from "../utils/Password";
+import { Email } from "../utils/types/Email";
+import { Name } from "../utils/types/Name";
+import { Password } from "../utils/types/Password";
 import { CreateUserDTO } from "../DTOs/user.dto";
 
 export class UserEntity {

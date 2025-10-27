@@ -2,7 +2,7 @@ import { AuthLoginDTO, AuthValidateTokenDTO } from "../DTOs/auth.dto";
 import { UserEntity } from "../entities/user.entity";
 import createUserPostgresRepository from "../repositories/user.postgres-repository";
 import { AppError, mapStatusCodeByName } from "../utils/APIError";
-import { Password } from "../utils/Password";
+import { Password } from "../utils/types/Password";
 import UserService from "./user.service";
 import jwt, { SignOptions } from "jsonwebtoken";
 import { config as configDotEnv } from "dotenv";

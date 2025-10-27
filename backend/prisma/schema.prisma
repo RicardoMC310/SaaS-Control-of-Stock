@@ -15,9 +15,27 @@ datasource db {
 }
 
 model User {
-  id   Int    @id @default(autoincrement())
-  name String
-  email String @unique
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
   passwordHash String
-  createdAt DateTime @default(now())
+  createdAt    DateTime @default(now())
+
+  products Product[]
+}
+
+model Product {
+  id            Int      @id @default(autoincrement())
+  name          String
+  quantity      Int
+  purchasePrice Decimal
+  salePrice     Decimal
+  code          String
+  minQuantity   Int
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  User   User @relation(fields: [userId], references: [id])
+  userId Int
 }
