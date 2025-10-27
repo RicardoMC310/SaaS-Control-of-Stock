@@ -10,7 +10,7 @@ export default class UserService {
 
         user.setFieldsWithUserDTO(userDTO);
 
-        return this.repository.Save(user);;
+        return this.repository.Save(user);
     }
 
     public async findUserByEmail(email: string): Promise<UserEntity> {

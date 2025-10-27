@@ -1,8 +1,24 @@
-import {type Response} from "express";
+import { type Response } from "express";
 
 const knownPrismaErrors: Record<string, string> = {
     P2002: "Já existe um registro com o(s) campo(s): ",
     P2025: "Registro não encontrado.",
+}
+
+enum HttpStatus {
+    NOT_FOUND = 404,
+    CONFLIT = 409,
+    BAD_REQUEST = 400,
+    INTERNAL_ERROR = 500,
+    BAD_GATEWAY = 502,
+    UNAUTHORIZED = 401,
+
+    CREATED = 201,
+    FOUND = 302,
+    SUCCESS = 200,
+
+    P2025 = 404,
+    P2002 = 400
 }
 
 const errorsToStatus: Record<string, number> = {
@@ -15,13 +31,13 @@ const errorsToStatus: Record<string, number> = {
 
     CREATED: 201,
     FOUND: 302,
-    SUCESS: 200,
+    SUCCESS: 200,
 
     P2025: 404,
     P2002: 400
 }
 
-export { knownPrismaErrors }
+export { knownPrismaErrors, HttpStatus };
 
 export function mapStatusCodeByName(code: string): number {
     return errorsToStatus[code] ?? 500;

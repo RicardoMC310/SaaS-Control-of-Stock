@@ -1,4 +1,5 @@
 import validator from "validator";
+import { AppError, HttpStatus } from "../APIError";
 
 export class Email {
     private value: string = "";
@@ -14,7 +15,7 @@ export class Email {
 
         if (!isEmailValid)
         {
-            throw new Error("email inválido, confira se digitou tudo corretamente");
+            throw new AppError("email inválido! verifique se digitou corretamente", HttpStatus.BAD_REQUEST);
         }
         
     }

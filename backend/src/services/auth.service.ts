@@ -1,7 +1,7 @@
 import { AuthLoginDTO, AuthValidateTokenDTO } from "../DTOs/auth.dto";
 import { UserEntity } from "../entities/user.entity";
 import createUserPostgresRepository from "../repositories/user.postgres-repository";
-import { AppError, mapStatusCodeByName } from "../utils/APIError";
+import { AppError, HttpStatus, mapStatusCodeByName } from "../utils/APIError";
 import { Password } from "../utils/types/Password";
 import UserService from "./user.service";
 import jwt, { SignOptions } from "jsonwebtoken";
@@ -61,7 +61,7 @@ class AuthService {
 
             return decoded;
         } catch (error) {
-            throw new AppError("Token inválido!", mapStatusCodeByName("UNAUTHORIZED"));
+            throw new AppError("Token inválido!", HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -82,7 +82,7 @@ class AuthService {
 
     private comparePasswordUserEntity(userEntityPassword: Password, passwordStr: string) {
         if (!userEntityPassword.comparePasswordWithHash(passwordStr)) {
-            throw new AppError("Senha inválida!", mapStatusCodeByName("BAD_REQUEST"));
+            throw new AppError("Senha inválida!", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -106,7 +106,7 @@ class AuthService {
 
     private getVariableEnvironment(key: string): string {
         if (!process.env[key]) {
-            throw new AppError(`${key} not found in environment variables`, mapStatusCodeByName("INTERNAL_ERROR"));
+            throw new AppError(`${key} not found in environment variables`, HttpStatus.INTERNAL_ERROR);
         }
 
         return process.env[key];

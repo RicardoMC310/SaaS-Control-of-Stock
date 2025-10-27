@@ -1,4 +1,5 @@
 import { hashSync as bcryptHashSync, compareSync as bcryptCompareSync } from "bcrypt";
+import { AppError, HttpStatus } from "../APIError";
 
 export class Password {
     private value: string = "";
@@ -37,7 +38,7 @@ export class Password {
         if (/[\W_]/.test(password)) score |= 1 << 4;
 
         if (!(score == this.PASSWORD_ALL_CRITERIA)) {
-            throw new Error("senha fraca, deve conter: 1 maiúscola, 1 minúscula, 1 número, 1 caracter especial e no mínimo 8 caracteres");
+            throw new AppError("senha fraca, deve conter: 1 maiúscola, 1 minúscula, 1 número, 1 caracter especial e no mínimo 8 caracteres", HttpStatus.BAD_REQUEST);
         }
     }
 

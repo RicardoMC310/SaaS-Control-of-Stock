@@ -1,3 +1,5 @@
+import { AppError, HttpStatus } from "../APIError";
+
 export class Name {
     private readonly MINIMUN_NAME_LETTERS: number = 3;
 
@@ -13,7 +15,7 @@ export class Name {
         let isNameValid: boolean = name.trim().length > this.MINIMUN_NAME_LETTERS;
 
         if (!isNameValid) {
-            throw new Error(`nome tem que ser maior que ${this.MINIMUN_NAME_LETTERS} caracteres`);
+            throw new AppError(`nome tem que ser maior que ${this.MINIMUN_NAME_LETTERS} caracteres`, HttpStatus.BAD_REQUEST);
         }
 
     }
