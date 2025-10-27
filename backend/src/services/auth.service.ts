@@ -1,7 +1,7 @@
 import { AuthLoginDTO, AuthValidateTokenDTO } from "../DTOs/auth.dto";
 import { UserEntity } from "../entities/user.entity";
 import createUserPostgresRepository from "../repositories/user.postgres-repository";
-import { AppError, HttpStatus, mapStatusCodeByName } from "../utils/APIError";
+import { AppError, HttpStatus, mapStatusCodeByName } from "../utils/APIUtils";
 import { Password } from "../utils/types/Password";
 import UserService from "./user.service";
 import jwt, { SignOptions } from "jsonwebtoken";

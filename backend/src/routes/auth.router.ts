@@ -1,6 +1,6 @@
 import express, { type Response, type Request, type Router } from "express";
 import createAuthService from "../services/auth.service";
-import { mapStatusCodeByName, returnErrorAPI, returnAPI, HttpStatus } from "../utils/APIError";
+import { mapStatusCodeByName, returnErrorAPI, returnAPI, HttpStatus } from "../utils/APIUtils";
 
 const AUTH_ROUTER: Router = express.Router();
 

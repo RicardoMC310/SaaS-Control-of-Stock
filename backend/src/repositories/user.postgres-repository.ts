@@ -2,7 +2,7 @@ import prisma from "../prisma";
 import { UserEntity } from "../entities/user.entity";
 import { IUserRepository } from "./user.repositories";
 import handleErrorsPrisma from "../utils/HandlingErrorsPrisma";
-import { AppError, HttpStatus, mapStatusCodeByName } from "../utils/APIError";
+import { AppError, HttpStatus, mapStatusCodeByName } from "../utils/APIUtils";
 
 class UserPostgresRepository implements IUserRepository {
     public async Save(user: UserEntity): Promise<UserEntity> {

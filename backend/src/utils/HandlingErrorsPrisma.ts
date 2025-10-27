@@ -1,5 +1,5 @@
 import { Prisma } from "../generated/prisma/client";
-import { AppError, getStatusAndMessageInPrismaErrors, HttpStatus } from "./APIError";
+import { AppError, getStatusAndMessageInPrismaErrors, HttpStatus } from "./APIUtils";
 
 
 export default function handleErrorsPrisma(err: unknown): string {

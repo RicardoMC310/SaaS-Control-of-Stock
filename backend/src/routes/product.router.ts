@@ -2,7 +2,7 @@ import express, { type Router, type Request, type Response } from "express";
 import { IProductRepository } from "../repositories/product.repositories";
 import { createProductPostgresRepository } from "../repositories/product.postgres-repository";
 import { createProductService } from "../services/product.service";
-import { HttpStatus, returnAPI, returnErrorAPI } from "../utils/APIError";
+import { HttpStatus, returnAPI, returnErrorAPI } from "../utils/APIUtils";
 import { ProductEntity } from "../entities/product.entity";
 
 const PRODUCT_ROUTER: Router = express.Router();

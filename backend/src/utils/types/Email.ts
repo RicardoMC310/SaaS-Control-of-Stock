@@ -1,5 +1,5 @@
 import validator from "validator";
-import { AppError, HttpStatus } from "../APIError";
+import { AppError, HttpStatus } from "../APIUtils";
 
 export class Email {
     private value: string = "";

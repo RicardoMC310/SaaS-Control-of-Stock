@@ -1,5 +1,5 @@
 import { hashSync as bcryptHashSync, compareSync as bcryptCompareSync } from "bcrypt";
-import { AppError, HttpStatus } from "../APIError";
+import { AppError, HttpStatus } from "../APIUtils";
 
 export class Password {
     private value: string = "";

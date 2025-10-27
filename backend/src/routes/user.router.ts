@@ -3,7 +3,7 @@ import { IUserRepository } from "../repositories/user.repositories";
 import createUserPostgresRepository from "../repositories/user.postgres-repository";
 import UserService from "../services/user.service";
 import { UserEntity } from "../entities/user.entity";
-import { mapStatusCodeByName, returnErrorAPI, returnAPI, HttpStatus } from "../utils/APIError";
+import { mapStatusCodeByName, returnErrorAPI, returnAPI, HttpStatus } from "../utils/APIUtils";
 
 const USER_ROUTER: Router = express.Router();
 const REPOSITORY: IUserRepository = createUserPostgresRepository();

@@ -1,4 +1,4 @@
-import { AppError, HttpStatus } from "../APIError";
+import { AppError, HttpStatus } from "../APIUtils";
 
 export class Quantity {
     private value: number = 0;

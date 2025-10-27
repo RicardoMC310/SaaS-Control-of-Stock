@@ -1,7 +1,7 @@
 import express, { type Router, type Request, type Response } from "express";
 import USER_ROUTER from "./user.router";
 import AUTH_ROUTER from "./auth.router";
-import { HttpStatus, mapStatusCodeByName, returnAPI } from "../utils/APIError";
+import { HttpStatus, mapStatusCodeByName, returnAPI } from "../utils/APIUtils";
 import PRODUCT_ROUTER from "./product.router";
 
 const ROUTER: Router = express.Router();

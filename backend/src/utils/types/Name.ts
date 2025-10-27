@@ -1,4 +1,4 @@
-import { AppError, HttpStatus } from "../APIError";
+import { AppError, HttpStatus } from "../APIUtils";
 
 export class Name {
     private readonly MINIMUN_NAME_LETTERS: number = 3;
