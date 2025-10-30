@@ -2,8 +2,9 @@ import express, { type Router, type Request, type Response } from "express";
 import { IProductRepository } from "../repositories/product.repositories";
 import { createProductPostgresRepository } from "../repositories/product.postgres-repository";
 import { createProductService } from "../services/product.service";
-import { HttpStatus, returnAPI, returnErrorAPI } from "../utils/APIUtils";
+import { AppError, HttpStatus, returnAPI, returnErrorAPI } from "../utils/APIUtils";
 import { ProductEntity } from "../entities/product.entity";
+import { authGuard } from "../middleware/product.guard";
 
 const PRODUCT_ROUTER: Router = express.Router();
 const REPOSITORY: IProductRepository = createProductPostgresRepository();
@@ -15,6 +16,18 @@ PRODUCT_ROUTER.post("/create", async (req: Request, res: Response) => {
 
         returnAPI(res, HttpStatus.CREATED, product);
         
+    } catch (error) {
+        returnErrorAPI(res, error);
+    }
+});
+
+PRODUCT_ROUTER.get("/findAll", authGuard, async (req: Request, res: Response) => {
+    try {
+        if (!req.user) throw new AppError("Token não verificado!", HttpStatus.UNAUTHORIZED);
+
+        const products = await SERVICE.findAll({userId: req.user.id});
+
+        returnAPI(res, HttpStatus.FOUND, products);
     } catch (error) {
         returnErrorAPI(res, error);
     }

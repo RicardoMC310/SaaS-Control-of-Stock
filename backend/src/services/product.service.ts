@@ -12,6 +12,10 @@ class ProductService {
 
         return await this.repository.Save(productEntity, productDTO.userID);
     }
+
+    public async findAll({userId}: {userId: number}) {
+        return await this.repository.FindAll(userId);
+    }
 }
 
 export function createProductService(repository: IProductRepository): ProductService {

@@ -26,6 +26,27 @@ class ProductPostgresRepository implements IProductRepository{
         return Object.assign(new ProductEntity(), productData);
     }
 
+    public async FindAll(userId: number): Promise<ProductEntity[] | unknown[]> {
+        let productsData;
+
+        try {
+            productsData = await prisma.product.findMany({
+                where: {
+                    userId: userId
+                }
+            });
+
+            return productsData.map(product => {
+                const productEntity = new ProductEntity();
+                Object.assign(productEntity, product);
+                return productEntity;
+            });
+        } catch (error) {
+            handleErrorsPrisma(error);
+        }
+        return [];
+    }
+
 }
 
 export function createProductPostgresRepository(): ProductPostgresRepository {

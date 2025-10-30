@@ -6,18 +6,12 @@ import { Password } from "../utils/types/Password";
 import UserService from "./user.service";
 import jwt, { SignOptions } from "jsonwebtoken";
 import { config as configDotEnv } from "dotenv";
+import { JWTPayloadCustom } from "../utils/types/Payloads";
 configDotEnv();
 
 interface AuthLoginResponseDTO {
     token: string;
 }
-
-interface JWTPayloadCustom {
-    id: number;
-    name: string;
-    email: string;
-    createdAt: Date;
-};
 
 class AuthService {
     private readonly NAME_JWT_SECRET_IN_VARIABLES_ENVIRONMENT: string = "JWT_SECRET";
@@ -44,13 +38,18 @@ class AuthService {
         this.getUserByToken(authValidateTokenDTO.token);
     }
 
-    public whoami(authValidateTokenDTO: AuthValidateTokenDTO) {
+    public whoami(authValidateTokenDTO: AuthValidateTokenDTO): JWTPayloadCustom {
         const user = this.getUserByToken(authValidateTokenDTO.token);
 
         delete user.exp;
         delete user.iat;
 
-        return user;
+        return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            createdAt: user.createdAt
+        };
     }
 
     private getUserByToken(token: string) {
