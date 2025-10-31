@@ -5,6 +5,7 @@ import { createProductService } from "../services/product.service";
 import { AppError, HttpStatus, returnAPI, returnErrorAPI } from "../utils/APIUtils";
 import { ProductEntity } from "../entities/product.entity";
 import { authGuard } from "../middleware/product.guard";
+import { mapQuerysToFilters } from "../utils/Querys";
 
 const PRODUCT_ROUTER: Router = express.Router();
 const REPOSITORY: IProductRepository = createProductPostgresRepository();
@@ -28,6 +29,19 @@ PRODUCT_ROUTER.get("/findAll", authGuard, async (req: Request, res: Response) =>
         const products = await SERVICE.findAll({userId: req.user.id});
 
         returnAPI(res, HttpStatus.FOUND, products);
+    } catch (error) {
+        returnErrorAPI(res, error);
+    }
+});
+
+PRODUCT_ROUTER.get("/findByFilters", authGuard, async (req: Request, res: Response) => {
+    try {
+        if (!req.user) throw new AppError("Token não verificado!", HttpStatus.UNAUTHORIZED);
+        const query = mapQuerysToFilters(req.query);
+        const products = await SERVICE.findByFilters(query, req.user.id);
+
+        returnAPI(res, HttpStatus.FOUND, products);
+
     } catch (error) {
         returnErrorAPI(res, error);
     }
