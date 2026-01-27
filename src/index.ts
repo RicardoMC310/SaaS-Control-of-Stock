@@ -1,3 +1,15 @@
-import App from "./app";
+import { createApp } from "./app";
 
-App.listen(3000, "0.0.0.0", () => console.log(`Rodando em 3000`));
+import DotEnv from "@utils/Env/dotenv";
+
+const bootstrap = async () => {
+    const App = await createApp();
+
+    const PORT = parseInt(DotEnv.getenv("SERVER_PORT", "3000"));
+
+    App.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
+}
+
+bootstrap();
