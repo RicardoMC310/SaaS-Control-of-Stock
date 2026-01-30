@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node-dev --respawn --transpile-only src/Infrastructure/server.ts",
+    "dev": "ts-node-dev --respawn --transpile-only src/Infrastructure/Server/server.ts",
     "build": "tsc",
-    "start": "node dist/Infrastructure/server.js"
+    "start": "node dist/Infrastructure/Server/server.js"
   },
   "keywords": [],
   "author": "RicardoMC310",
