@@ -2,4 +2,6 @@ node_modules/
 pnpm-lock.yaml
 
 .env
-dist
+dist/
+
+src/Infrastructure/certs
