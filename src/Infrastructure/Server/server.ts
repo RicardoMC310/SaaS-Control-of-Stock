@@ -1,20 +1,11 @@
-import express, { type Express } from "express";
+import AppServer from "./app";
+import env from "../Config/env";
+import APIRouter from "./router";
+import UserRouter from "./Routes/user"
 
-class App {
-    private server: Express = express();
+const ApiRouter: APIRouter = new APIRouter();
+ApiRouter.loadRoute("/user", UserRouter);
 
-    constructor(
-        private readonly host: string,
-        private readonly port: number
-    ) {}
+const App: AppServer = new AppServer(env.HOST, env.PORT, ApiRouter);
 
-    run(): void {
-        this.server.listen(this.port, this.host, () => {
-            console.log(`Running in (host: ${this.host} | port: ${this.port})`);
-        });
-    }
-}
-
-const app: App = new App("localhost", 8080);
-
-app.run();
+App.run();
