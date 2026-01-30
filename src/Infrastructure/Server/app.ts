@@ -19,6 +19,14 @@ class AppServer {
     }
 
     run(): void {
+        const options = this.createOptionsSSL();
+
+        https.createServer(options, this.server).listen(this.port, this.host, () => {
+            console.log(`Running server in [host: ${this.host} | port: ${this.port}]`);
+        });
+    }
+
+    private createOptionsSSL(): {key: any, cert: any} {
         const keyPath = pathJoin(__dirname, "../certs/key.pem");
         const certPath = pathJoin(__dirname, "../certs/cert.pem");
 
@@ -27,9 +35,7 @@ class AppServer {
             cert: fs.readFileSync(certPath)
         };
 
-        https.createServer(options, this.server).listen(this.port, this.host, () => {
-            console.log(`Running server in [host: ${this.host} | port: ${this.port}]`);
-        });
+        return options;
     }
 
     private initConfigServer(): void {
