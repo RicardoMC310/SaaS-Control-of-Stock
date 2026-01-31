@@ -13,6 +13,7 @@ class DotEnv {
 }
 
 export default {
-    PORT: parseInt(DotEnv.getenv("SERVER_PORT", "8080")),
-    HOST: DotEnv.getenv("SERVER_HOST", "127.0.0.1")
+    SERVER_PORT: parseInt(DotEnv.getenv("SERVER_PORT", "8080")),
+    SERVER_HOST: DotEnv.getenv("SERVER_HOST", "127.0.0.1"),
+    DATABASE_URL: DotEnv.getenv("DATABASE_URL")
 };
