@@ -2,10 +2,10 @@
   "name": "control-stock",
   "version": "1.0.0",
   "description": "SaaS of the control stock",
-  "main": "index.js",
+  "main": "src/Infrastructure/Server/server.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsx watch src/Infrastructure/Server/server.ts",
+    "dev": "nodemon --watch src --watch .env --ext ts,json --exec tsx src/Infrastructure/Server/server.ts",
     "build": "tsc",
     "start": "node dist/Infrastructure/Server/server.js"
   },
@@ -14,6 +14,7 @@
   "license": "MIT",
   "packageManager": "pnpm@10.28.2",
   "dependencies": {
+    "@neondatabase/serverless": "^1.0.2",
     "dotenv": "^17.2.3",
     "express": "^5.2.1"
   },
@@ -22,6 +23,9 @@
     "@types/dotenv": "^8.2.3",
     "@types/express": "^5.0.6",
     "@types/node": "^25.1.0",
+    "@types/pg": "^8.16.0",
+    "nodemon": "^3.1.11",
+    "prisma": "^7.3.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
