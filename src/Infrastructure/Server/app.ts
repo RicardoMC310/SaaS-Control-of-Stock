@@ -2,7 +2,7 @@ import express, { type Express } from "express";
 import https from "https";
 import fs from "fs";
 import { join as pathJoin } from "path";
-import APIRouter from "./router";
+import APIRouter from "@Infrastructure/Server/router";
 
 class AppServer {
     private readonly server: Express;
