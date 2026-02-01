@@ -1,14 +1,16 @@
 {
   "extends" : "@tsconfig/recommended/tsconfig.json",
   "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "node",
+
+    "target": "ES2022",
+
     "outDir": "dist",
     "rootDir": "src",
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "paths": {
-      "@Adapters/*": ["Adapters/*"],
-      "@Domain/*": ["Domain/*"],
-      "@Applications/*": ["Applications/*"],
-      "@Infrastructure/*": ["Infrastructure/*"],
+      "@/*": ["src/*"]
     }
   },
   "include": ["src/**/*"]
