@@ -1,6 +1,6 @@
 import express, { type Router } from "express";
-import UserService from "@Applications/User/UserService";
-import UserRepositoryImpl from "@Adapters/out/persistence/neon/User/UserRepositoryImpl";
+import UserService from "@/Applications/User/UserService";
+import UserRepositoryImpl from "@/Adapters/out/persistence/neon/User/UserRepositoryImpl";
 
 const UserRouter: Router = express.Router();
 

@@ -1,5 +1,5 @@
-import IUserRepository from "@Domain/User/IUserRepository";
-import User from "@Domain/User/User";
+import IUserRepository from "@/Domain/User/IUserRepository";
+import User from "@/Domain/User/User";
 
 export default class UserService {
     constructor(
