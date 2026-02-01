@@ -1,6 +1,8 @@
-import { neon } from "@neondatabase/serverless";
-import env from "@Infrastructure/Config/env";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaClient } from "@/Infrastructure/generated/prisma/client";
+import env from "@/Infrastructure/Config/env";
 
-const ExecuteSql = neon(env.DATABASE_URL);
+const adapter = new PrismaPg({ connectionString: env.DATABASE_URL });
+const prisma = new PrismaClient({ adapter });
 
-export default ExecuteSql;
+export default prisma;

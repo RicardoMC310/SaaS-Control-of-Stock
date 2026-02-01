@@ -1,8 +1,8 @@
-import AppServer from "@Infrastructure/Server/app";
-import env from "@Infrastructure/Config/env";
-import APIRouter from "@Infrastructure/Server/router";
+import AppServer from "@/Infrastructure/Server/app";
+import env from "@/Infrastructure/Config/env";
+import APIRouter from "@/Infrastructure/Server/router";
 
-import UserRouter from "@Adapters/in/User/UserController"
+import UserRouter from "@/Adapters/in/User/UserController"
 
 const ApiRouter: APIRouter = new APIRouter();
 ApiRouter.loadRoute("/user", UserRouter);

@@ -2,7 +2,10 @@ import express, { type Express } from "express";
 import https from "https";
 import fs from "fs";
 import { join as pathJoin } from "path";
-import APIRouter from "@Infrastructure/Server/router";
+import APIRouter from "@/Infrastructure/Server/router";
+import { getDirname } from "@/Infrastructure/utils/path";
+
+const __dirname = getDirname(import.meta.url);
 
 class AppServer {
     private readonly server: Express;
