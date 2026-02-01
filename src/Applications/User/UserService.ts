@@ -6,7 +6,7 @@ export default class UserService {
         private readonly repository: IUserRepository
     ) {}
 
-    findAll(): User[] {
-        return this.repository.findAll();
+    async findAll(): Promise<User[]> {
+        return await this.repository.findAll();
     }
 }

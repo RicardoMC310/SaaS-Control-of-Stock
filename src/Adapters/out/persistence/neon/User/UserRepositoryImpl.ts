@@ -4,15 +4,14 @@ import prisma from "@/Infrastructure/Database/database";
 
 export default class UserRepositoryImpl implements IUserRepository
 {
-    private numbers: User[] = [
-        {id: 1},
-        {id: 2},
-        {id: 3},
-        {id: 4},
-        {id: 5},
-    ];
+    async findAll(): Promise<User[]> {
+        const result = await prisma.peoples.findMany();
+        const users: User[] = [];
 
-    findAll(): User[] {
-        return this.numbers;
+        result.map((value) => {
+            users.push(new User(value.ID, value.name, value.email, value.passwordHash));
+        });
+
+        return users;
     }
 }

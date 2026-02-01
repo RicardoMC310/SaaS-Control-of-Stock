@@ -7,11 +7,11 @@ const UserRouter: Router = express.Router();
 const userRepository = new UserRepositoryImpl();
 const userService = new UserService(userRepository);
 
-UserRouter.get("/", (req, res) => {
+UserRouter.get("/", async (_req, res) => {
 
     res.status(200).json({
         message: "OK",
-        numbers: userService.findAll()
+        users: await userService.findAll()
     });
 });
 

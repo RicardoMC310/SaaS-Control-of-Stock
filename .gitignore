@@ -6,3 +6,4 @@ dist/
 
 src/Infrastructure/certs
 src/Infrastructure/generated/
+prisma/migrations/

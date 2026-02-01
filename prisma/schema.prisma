@@ -20,32 +20,27 @@ enum PeopleState {
 }
 
 model Peoples {
-  ID            Int         @id @default(autoincrement()) @map("id")
-  name          String
-  email         String      @unique
-  passwordHash  String      @map("password_hash")
-  imageFileName String?     @map("image_filename")
-  state         PeopleState @default(UNASSOCIATED)
+  ID           Int         @id @default(autoincrement())
+  name         String
+  email        String      @unique
+  passwordHash String
+  state        PeopleState @default(UNASSOCIATED)
   // if EMPLOYEE
-  companyID     Int?        @map("company_id")
-  company       Company?    @relation("EmployeeCompany", fields: [companyID], references: [ID], onUpdate: Cascade)
+  companyID    Int?
+  company      Company?    @relation("EmployeeCompany", fields: [companyID], references: [ID], onUpdate: Cascade)
   // if BOSS
-  ownedCompany  Company?    @relation("BossCompany")
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-
-  @@map("peoples")
+  ownedCompany Company?    @relation("BossCompany")
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
 }
 
 model Company {
-  ID        Int      @id @default(autoincrement()) @map("id")
-  name      String   @unique
+  ID        Int       @id @default(autoincrement())
+  name      String    @unique
   // What`s peoples boss
-  bossID    Int      @unique @map("boss_id")
+  bossID    Int       @unique
   boss      Peoples   @relation("BossCompany", fields: [bossID], references: [ID], onUpdate: Cascade)
   employees Peoples[] @relation("EmployeeCompany")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("company")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
