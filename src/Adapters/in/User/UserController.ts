@@ -1,18 +1,18 @@
-import express, { type Router } from "express";
+import express, { type Router, type Request } from "express";
 import UserService from "@/Applications/User/UserService";
 import UserRepositoryImpl from "@/Adapters/out/persistence/neon/User/UserRepositoryImpl";
+import APIController from "@/Infrastructure/APIUtils/APIWrapper";
 
 const UserRouter: Router = express.Router();
 
 const userRepository = new UserRepositoryImpl();
 const userService = new UserService(userRepository);
 
-UserRouter.get("/", async (_req, res) => {
-
-    res.status(200).json({
-        message: "OK",
-        users: await userService.findAll()
-    });
-});
+UserRouter.get("/", APIController({
+    handler: async (_req: Request) => {
+        return await userService.findAll();
+    },
+    message: "Users Found!"
+}));
 
 export default UserRouter;
