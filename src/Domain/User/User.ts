@@ -1,16 +1,34 @@
+import UserBossState from "./States/UserBossState";
+import UserEmployeeState from "./States/UserEmployeeState";
+import UserUnassociatedState from "./States/UserUnassociatedState";
 import Email from "./ValueObjects/Email";
 import Name from "./ValueObjects/Name";
 import Password from "./ValueObjects/PasswordHash";
-import {UserState} from "./ValueObjects/UserState";
+import UserState from "./ValueObjects/UserState";
 
 export default class User {
 
     constructor(
-       private readonly name: Name,
-       private readonly email: Email,
-       private readonly passwordHash: Password,
-       private readonly state: UserState,
+       private name: Name,
+       private email: Email,
+       private passwordHash: Password,
+       private state: UserState,
     ) {}
+
+    becomeBoss() {
+        this.state.assertBecomeBoss();
+        this.state = new UserBossState();
+    }
+
+    becomeEmployee() {
+        this.state.assertBecomeEmployee();
+        this.state = new UserEmployeeState();
+    }
+
+    becomeUnassociated() {
+        this.state.assertBecomeUnassociated();
+        this.state = new UserUnassociatedState();
+    }
 
     getName(): string {
         return this.name.toString();
@@ -25,6 +43,6 @@ export default class User {
     }
 
     getState(): string {
-        return this.state;
+        return this.state.toString();
     }
 };

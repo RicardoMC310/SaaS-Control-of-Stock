@@ -25,4 +25,25 @@ UserRouter.get("/findAll", APIController({
     message: "All users found"
 }));
 
+UserRouter.post("/become/boss", APIController({
+    handler: async (req: Request) => {
+        return await userService.makeUserBoss(req.body?.email);
+    },
+    message: "User becomed Boss"
+}));
+
+UserRouter.post("/become/employee", APIController({
+    handler: async (req: Request) => {
+        return await userService.makeUserEmployee(req.body?.email);
+    },
+    message: "User becomed Employee"
+}));
+
+UserRouter.post("/become/unassociated", APIController({
+    handler: async (req: Request) => {
+        return await userService.makeUserUnassociated(req.body?.email);
+    },
+    message: "User becomed Unassociated"
+}));
+
 export default UserRouter;

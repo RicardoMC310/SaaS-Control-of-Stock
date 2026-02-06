@@ -7,7 +7,7 @@ import APIError from "@/Infrastructure/APIUtils/APIError";
 import { Prisma } from "@/Infrastructure/generated/prisma/client";
 
 export default class UserRepositoryImpl implements IUserRepository {
-    
+        
     async save(user: User): Promise<User> {
         try {
             const entity: UserPersistenceDTO = UserMapper.domainToEntity(user);
@@ -41,6 +41,44 @@ export default class UserRepositoryImpl implements IUserRepository {
 
         } catch (error) {
             throw new APIError("Failed to load users", 500);
+        }
+    }
+
+    async findByEmail(email: string): Promise<User> {
+        try {
+            const entity = await prisma.peoples.findFirst({
+                where: { email }
+            })
+
+            if (!entity) throw new APIError(`User by email ${email} not found`, 404);
+
+            return UserMapper.entityToDomain(entity);
+        } catch(error) {
+            if (error instanceof APIError) {
+                throw error;
+            }
+
+            throw new APIError("Failed to load user by email", 500);
+        }
+    }
+
+    async updated(user: User): Promise<User> {
+        try {
+            const entity = UserMapper.domainToEntity(user);
+
+            const updated = await prisma.peoples.update({
+                where: {email: entity.email},
+                data: entity
+            })
+
+            return UserMapper.entityToDomain(updated);
+            
+        } catch (error) {
+            if (error instanceof APIError) {
+                throw error;
+            }
+
+            throw new APIError("Failed to update user", 500);
         }
     }
 

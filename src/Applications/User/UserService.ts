@@ -4,9 +4,9 @@ import CreateUserDTO from "./UserCreateDTO";
 import Name from "@/Domain/User/ValueObjects/Name";
 import Email from "@/Domain/User/ValueObjects/Email";
 import Password from "@/Domain/User/ValueObjects/PasswordHash";
-import {UserState} from "@/Domain/User/ValueObjects/UserState";
 import UserMapper from "@/Infrastructure/Mappers/UserMapper";
 import UserResponseDTO from "@/Domain/User/UserResponseDTO";
+import UserUnassociatedState from "@/Domain/User/States/UserUnassociatedState";
 
 export default class UserService {
     constructor(
@@ -18,7 +18,7 @@ export default class UserService {
             Name.create(userCreateDTO.name),
             Email.create(userCreateDTO.email),
             Password.create(userCreateDTO.password),
-            UserState.UNASSOCIATED
+            new UserUnassociatedState()
         );
 
         const userSaved = await this.repository.save(user);
@@ -35,5 +35,35 @@ export default class UserService {
         })
 
         return usersDTO;
+    }
+
+    async makeUserBoss(email: string): Promise<UserResponseDTO> {
+        const user = await this.repository.findByEmail(email);
+
+        user.becomeBoss();
+
+        const userUpdated = await this.repository.updated(user);
+
+        return UserMapper.domainToDTO(userUpdated);
+    }
+
+    async makeUserEmployee(email: string): Promise<UserResponseDTO> {
+        const user = await this.repository.findByEmail(email);
+
+        user.becomeEmployee();
+
+        const userUpdated = await this.repository.updated(user);
+
+        return UserMapper.domainToDTO(userUpdated);
+    }
+
+    async makeUserUnassociated(email: string): Promise<UserResponseDTO> {
+        const user = await this.repository.findByEmail(email);
+
+        user.becomeUnassociated();
+
+        const userUpdated = await this.repository.updated(user);
+
+        return UserMapper.domainToDTO(userUpdated);
     }
 }

@@ -1,15 +1,10 @@
-enum UserState {
-    UNASSOCIATED = "UNASSOCIATED",
-    BOSS = "BOSS",
-    EMPLOYEE = "EMPLOYEE"
+
+abstract class UserState {
+    abstract assertBecomeBoss(): void;
+    abstract assertBecomeEmployee(): void;
+    abstract assertBecomeUnassociated(): void;
+
+    abstract toString(): string;
 }
 
-const createState = (state: string): UserState => {
-    if(!Object.values(UserState).includes(state as UserState)) {
-        throw new Error(`State ${state} missing`);
-    }
-
-    return state as UserState;
-}
-
-export {UserState, createState};
+export default UserState;
