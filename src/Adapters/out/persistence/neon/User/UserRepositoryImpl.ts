@@ -1,7 +1,7 @@
 import IUserRepository from "@/Domain/User/IUserRepository";
 import User from "@/Domain/User/User";
 import prisma from "@/Infrastructure/Database/database";
-import UserMapper from "@/Mappers/UserMapper";
+import UserMapper from "@/Infrastructure/Mappers/UserMapper";
 import UserPersistenceDTO from "./UserPersistenceDTO";
 import APIError from "@/Infrastructure/APIUtils/APIError";
 import { Prisma } from "@/Infrastructure/generated/prisma/client";

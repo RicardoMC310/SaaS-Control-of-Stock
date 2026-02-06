@@ -5,7 +5,7 @@ import Name from "@/Domain/User/ValueObjects/Name";
 import Email from "@/Domain/User/ValueObjects/Email";
 import Password from "@/Domain/User/ValueObjects/PasswordHash";
 import {UserState} from "@/Domain/User/ValueObjects/UserState";
-import UserMapper from "@/Mappers/UserMapper";
+import UserMapper from "@/Infrastructure/Mappers/UserMapper";
 import UserResponseDTO from "@/Domain/User/UserResponseDTO";
 
 export default class UserService {
