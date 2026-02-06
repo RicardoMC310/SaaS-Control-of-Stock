@@ -4,6 +4,7 @@ import fs from "fs";
 import { join as pathJoin } from "path";
 import APIRouter from "@/Infrastructure/Server/router";
 import { getDirname } from "@/Infrastructure/utils/path";
+import env from "@/Infrastructure/Config/env";
 
 const __dirname = getDirname(import.meta.url);
 
@@ -30,8 +31,8 @@ class AppServer {
     }
 
     private createOptionsSSL(): {key: any, cert: any} {
-        const keyPath = pathJoin(__dirname, "../certs/key.pem");
-        const certPath = pathJoin(__dirname, "../certs/cert.pem");
+        const keyPath = env.KEY_SSL_PATH;
+        const certPath = env.CERT_SSL_PATH;
 
         const options = {
             key: fs.readFileSync(keyPath),
