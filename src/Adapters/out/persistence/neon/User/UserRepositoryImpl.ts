@@ -1,17 +1,47 @@
 import IUserRepository from "@/Domain/User/IUserRepository";
 import User from "@/Domain/User/User";
 import prisma from "@/Infrastructure/Database/database";
+import UserMapper from "@/Mappers/UserMapper";
+import UserPersistenceDTO from "./UserPersistenceDTO";
+import APIError from "@/Infrastructure/APIUtils/APIError";
+import { Prisma } from "@/Infrastructure/generated/prisma/client";
 
-export default class UserRepositoryImpl implements IUserRepository
-{
-    async findAll(): Promise<User[]> {
-        const result = await prisma.peoples.findMany();
-        const users: User[] = [];
+export default class UserRepositoryImpl implements IUserRepository {
+    
+    async save(user: User): Promise<User> {
+        try {
+            const entity: UserPersistenceDTO = UserMapper.domainToEntity(user);
 
-        result.map((value) => {
-            users.push(new User(value.ID, value.name, value.email, value.passwordHash));
-        });
+            const created = await prisma.peoples.create({
+                data: entity
+            });
 
-        return users;
+            return UserMapper.entityToDomain(created);
+        } catch (error) {
+            if (error instanceof Prisma.PrismaClientKnownRequestError) {
+                if (error.code === "P2002") {
+                    throw new APIError("Email already exists", 409);
+                }
+            }
+
+            throw new APIError("Failed to save user", 500);
+        }
     }
+
+    async findAll(): Promise<User[]> {
+        try {
+            const entities = await prisma.peoples.findMany();
+            const users: User[] = [];
+
+            entities.map(entity => {
+                users.push(UserMapper.entityToDomain(entity));
+            });
+
+            return users;
+
+        } catch (error) {
+            throw new APIError("Failed to load users", 500);
+        }
+    }
+
 }
