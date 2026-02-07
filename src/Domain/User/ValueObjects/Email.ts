@@ -17,7 +17,7 @@ export default class Email {
         return new Email(email);
     }
 
-    private static validate(email: string) {
+    static validate(email: string) {
         if (!validator.isEmail(email)) {
             throw new Error("Email invalid!");
         }
