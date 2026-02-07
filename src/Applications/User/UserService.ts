@@ -9,6 +9,7 @@ import UserResponseDTO from "@/Domain/User/UserResponseDTO";
 import Role from "@/Domain/User/ValueObjects/Role";
 import UserFactoryState from "@/Domain/User/UserFactoryRole";
 import UserChangeRoleDTO from "./UserChangeRoleDTO";
+import UserFindByEmailDTO from "./UserFindByEmailDTO";
 
 export default class UserService {
     constructor(
@@ -50,6 +51,14 @@ export default class UserService {
         const userUpdated = await this.repository.updated(user);
 
         return UserMapper.domainToDTO(userUpdated);
+    }
+
+    async findByEmail(userFindByEmailDTO: UserFindByEmailDTO): Promise<UserResponseDTO> {
+        Email.validate(userFindByEmailDTO.email);
+
+        const user = await this.repository.findByEmail(userFindByEmailDTO.email);
+
+        return UserMapper.domainToDTO(user);
     }
 
     private existsRole(role: string): boolean {

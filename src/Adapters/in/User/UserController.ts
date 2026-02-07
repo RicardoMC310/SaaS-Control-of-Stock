@@ -4,6 +4,7 @@ import UserRepositoryImpl from "@/Adapters/out/persistence/neon/User/UserReposit
 import APIController from "@/Infrastructure/APIUtils/APIWrapper";
 import CreateUserDTO from "@/Applications/User/UserCreateDTO";
 import UserChangeRoleDTO from "@/Applications/User/UserChangeRoleDTO";
+import UserFindByEmailDTO from "@/Applications/User/UserFindByEmailDTO";
 
 const UserRouter: Router = express.Router();
 
@@ -19,21 +20,30 @@ UserRouter.post("/create", APIController({
     message: "User created"
 }));
 
-UserRouter.get("/findAll", APIController({
+UserRouter.get("/find/all", APIController({
     handler: async (_req: Request) => {
         return await userService.findAll();
     },
     message: "All users found"
 }));
 
-UserRouter.post("/change/role", APIController({
+UserRouter.post("/find/by/email", APIController({
+    handler: async (req: Request) => {
+        const userFindByEmailDTO: UserFindByEmailDTO = req.body;
+
+        return await userService.findByEmail(userFindByEmailDTO);
+    },
+    message: "User found"
+}));
+
+UserRouter.put("/change/role", APIController({
     handler: async (req: Request) => {
         const userChangeRoleDTO: UserChangeRoleDTO = req.body;
         userChangeRoleDTO.role = userChangeRoleDTO.role.toUpperCase();
 
         return await userService.changeRole(userChangeRoleDTO);
     },
-    message: "User becomed Boss"
+    message: "User updated role"
 }));
 
 export default UserRouter;
