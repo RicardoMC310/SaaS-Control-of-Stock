@@ -1,5 +1,5 @@
 export default interface UserResponseDTO {
     name: string,
     email: string,
-    state: string
+    role: string
 }

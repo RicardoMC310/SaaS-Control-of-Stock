@@ -1,6 +1,6 @@
-import UserBossState from "./States/UserBossState";
-import UserEmployeeState from "./States/UserEmployeeState";
-import UserUnassociatedState from "./States/UserUnassociatedState";
+import UserBossState from "./Roles/UserBossState";
+import UserEmployeeState from "./Roles/UserEmployeeState";
+import UserUnassociatedState from "./Roles/UserUnassociatedState";
 import Role from "./ValueObjects/Role";
 import UserState from "./ValueObjects/UserState";
 

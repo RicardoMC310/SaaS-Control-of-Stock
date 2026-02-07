@@ -5,7 +5,6 @@ import UserResponseDTO from "@/Domain/User/UserResponseDTO";
 import Email from "@/Domain/User/ValueObjects/Email";
 import Name from "@/Domain/User/ValueObjects/Name";
 import Password from "@/Domain/User/ValueObjects/PasswordHash";
-import UserState from "@/Domain/User/ValueObjects/UserState";
 import { UserRoles } from "@/Infrastructure/generated/prisma/enums";
 
 export default class UserMapper {
@@ -31,7 +30,7 @@ export default class UserMapper {
         return {
             name: user.getName(),
             email: user.getEmail(),
-            state: user.getRole()
+            role: user.getRole()
         }
     }
 
