@@ -9,6 +9,7 @@ export default class APIResponser {
     response(message: string, status: number = 200, data?: unknown): void {
         this.responser.status(status).json({
             message,
+            status,
             data
         });
     }
