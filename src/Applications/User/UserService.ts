@@ -10,10 +10,12 @@ import Role from "@/Domain/User/ValueObjects/Role";
 import UserFactoryState from "@/Domain/User/UserFactoryRole";
 import UserChangeRoleDTO from "./UserChangeRoleDTO";
 import UserFindByEmailDTO from "./UserFindByEmailDTO";
+import IUserMapper from "./IUserMapper";
 
 export default class UserService {
     constructor(
-        private readonly repository: IUserRepository
+        private readonly repository: IUserRepository,
+        private readonly userMapper: IUserMapper
     ) { }
 
     async save(userCreateDTO: CreateUserDTO): Promise<UserResponseDTO> {
@@ -26,7 +28,7 @@ export default class UserService {
 
         const userSaved = await this.repository.save(user);
 
-        return UserMapper.domainToDTO(userSaved);
+        return this.userMapper.domainToDTO(userSaved);
     }
 
     async findAll(): Promise<UserResponseDTO[]> {
@@ -34,7 +36,7 @@ export default class UserService {
         const usersDTO: UserResponseDTO[] = [];
 
         users.map(user => {
-            usersDTO.push(UserMapper.domainToDTO(user));
+            usersDTO.push(this.userMapper.domainToDTO(user));
         })
 
         return usersDTO;
@@ -50,7 +52,7 @@ export default class UserService {
 
         const userUpdated = await this.repository.updated(user);
 
-        return UserMapper.domainToDTO(userUpdated);
+        return this.userMapper.domainToDTO(userUpdated);
     }
 
     async findByEmail(userFindByEmailDTO: UserFindByEmailDTO): Promise<UserResponseDTO> {
@@ -58,7 +60,7 @@ export default class UserService {
 
         const user = await this.repository.findByEmail(userFindByEmailDTO.email);
 
-        return UserMapper.domainToDTO(user);
+        return this.userMapper.domainToDTO(user);
     }
 
     private existsRole(role: string): boolean {

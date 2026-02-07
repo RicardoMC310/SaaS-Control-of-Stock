@@ -5,18 +5,23 @@ import UserMapper from "@/Infrastructure/Mappers/UserMapper";
 import UserPersistenceDTO from "./UserPersistenceDTO";
 import APIError from "@/Infrastructure/APIUtils/APIError";
 import { Prisma } from "@/Infrastructure/generated/prisma/client";
+import IUserMapper from "@/Applications/User/IUserMapper";
 
 export default class UserRepositoryImpl implements IUserRepository {
+
+    constructor(
+        private readonly userMapper: IUserMapper
+    ) {}
         
     async save(user: User): Promise<User> {
         try {
-            const entity: UserPersistenceDTO = UserMapper.domainToEntity(user);
+            const entity: UserPersistenceDTO = this.userMapper.domainToEntity(user);
 
             const created = await prisma.users.create({
                 data: entity
             });
 
-            return UserMapper.entityToDomain(created);
+            return this.userMapper.entityToDomain(created);
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
                 if (error.code === "P2002") {
@@ -34,7 +39,7 @@ export default class UserRepositoryImpl implements IUserRepository {
             const users: User[] = [];
 
             entities.map(entity => {
-                users.push(UserMapper.entityToDomain(entity));
+                users.push(this.userMapper.entityToDomain(entity));
             });
 
             return users;
@@ -52,7 +57,7 @@ export default class UserRepositoryImpl implements IUserRepository {
 
             if (!entity) throw new APIError(`User by email ${email} not found`, 404);
 
-            return UserMapper.entityToDomain(entity);
+            return this.userMapper.entityToDomain(entity);
         } catch(error) {
             if (error instanceof APIError) {
                 throw error;
@@ -64,14 +69,14 @@ export default class UserRepositoryImpl implements IUserRepository {
 
     async updated(user: User): Promise<User> {
         try {
-            const entity = UserMapper.domainToEntity(user);
+            const entity = this.userMapper.domainToEntity(user);
 
             const updated = await prisma.users.update({
                 where: {email: entity.email},
                 data: entity
             })
 
-            return UserMapper.entityToDomain(updated);
+            return this.userMapper.entityToDomain(updated);
             
         } catch (error) {
             if (error instanceof APIError) {

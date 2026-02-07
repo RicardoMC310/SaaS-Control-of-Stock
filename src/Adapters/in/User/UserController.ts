@@ -5,11 +5,14 @@ import APIController from "@/Infrastructure/APIUtils/APIWrapper";
 import CreateUserDTO from "@/Applications/User/UserCreateDTO";
 import UserChangeRoleDTO from "@/Applications/User/UserChangeRoleDTO";
 import UserFindByEmailDTO from "@/Applications/User/UserFindByEmailDTO";
+import IUserMapper from "@/Applications/User/IUserMapper";
+import UserMapperImpl from "@/Adapters/out/Mappers/UserMapperImpl";
 
 const UserRouter: Router = express.Router();
 
-const userRepository = new UserRepositoryImpl();
-const userService = new UserService(userRepository);
+const userMapper: IUserMapper = new UserMapperImpl();
+const userRepository = new UserRepositoryImpl(userMapper);
+const userService = new UserService(userRepository, userMapper);
 
 UserRouter.post("/create", APIController({
     handler: async (req: Request) => {
