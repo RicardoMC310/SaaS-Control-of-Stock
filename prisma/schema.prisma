@@ -13,18 +13,18 @@ datasource db {
   provider = "postgresql"
 }
 
-enum PeopleState {
+enum UserRoles {
   UNASSOCIATED
   BOSS
   EMPLOYEE
 }
 
-model Peoples {
+model Users {
   ID           String      @id @default(cuid())
   name         String
   email        String      @unique
   passwordHash String
-  state        PeopleState @default(UNASSOCIATED)
+  role        UserRoles @default(UNASSOCIATED)
   // if EMPLOYEE
   companyID    String?
   company      Company?    @relation("EmployeeCompany", fields: [companyID], references: [ID], onUpdate: Cascade)
@@ -41,8 +41,8 @@ model Company {
   name      String    @unique
   // What`s peoples boss
   bossID    String    @unique
-  boss      Peoples   @relation("BossCompany", fields: [bossID], references: [ID], onUpdate: Cascade)
-  employees Peoples[] @relation("EmployeeCompany")
+  boss      Users   @relation("BossCompany", fields: [bossID], references: [ID], onUpdate: Cascade)
+  employees Users[] @relation("EmployeeCompany")
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 

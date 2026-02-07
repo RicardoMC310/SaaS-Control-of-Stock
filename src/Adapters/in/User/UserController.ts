@@ -3,6 +3,7 @@ import UserService from "@/Applications/User/UserService";
 import UserRepositoryImpl from "@/Adapters/out/persistence/neon/User/UserRepositoryImpl";
 import APIController from "@/Infrastructure/APIUtils/APIWrapper";
 import CreateUserDTO from "@/Applications/User/UserCreateDTO";
+import UserChangeRoleDTO from "@/Applications/User/UserChangeRoleDTO";
 
 const UserRouter: Router = express.Router();
 
@@ -25,25 +26,14 @@ UserRouter.get("/findAll", APIController({
     message: "All users found"
 }));
 
-UserRouter.post("/become/boss", APIController({
+UserRouter.post("/change/role", APIController({
     handler: async (req: Request) => {
-        return await userService.makeUserBoss(req.body?.email);
+        const userChangeRoleDTO: UserChangeRoleDTO = req.body;
+        userChangeRoleDTO.role = userChangeRoleDTO.role.toUpperCase();
+
+        return await userService.changeRole(userChangeRoleDTO);
     },
     message: "User becomed Boss"
-}));
-
-UserRouter.post("/become/employee", APIController({
-    handler: async (req: Request) => {
-        return await userService.makeUserEmployee(req.body?.email);
-    },
-    message: "User becomed Employee"
-}));
-
-UserRouter.post("/become/unassociated", APIController({
-    handler: async (req: Request) => {
-        return await userService.makeUserUnassociated(req.body?.email);
-    },
-    message: "User becomed Unassociated"
 }));
 
 export default UserRouter;

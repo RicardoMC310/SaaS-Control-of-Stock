@@ -1,33 +1,25 @@
-import UserBossState from "./States/UserBossState";
-import UserEmployeeState from "./States/UserEmployeeState";
-import UserUnassociatedState from "./States/UserUnassociatedState";
+import UserFactoryState from "./UserFactoryRole";
 import Email from "./ValueObjects/Email";
 import Name from "./ValueObjects/Name";
 import Password from "./ValueObjects/PasswordHash";
+import Role from "./ValueObjects/Role";
 import UserState from "./ValueObjects/UserState";
 
 export default class User {
 
     constructor(
-       private name: Name,
-       private email: Email,
-       private passwordHash: Password,
-       private state: UserState,
-    ) {}
+        private name: Name,
+        private email: Email,
+        private passwordHash: Password,
+        private role: UserState,
+    ) { }
 
-    becomeBoss() {
-        this.state.assertBecomeBoss();
-        this.state = new UserBossState();
-    }
+    changeRole(target: Role): void {
+        if (!this.role.canChangeTo(target)) {
+            throw new Error(`Cannot change from ${this.role.toRole()} to ${target as string}`);
+        }
 
-    becomeEmployee() {
-        this.state.assertBecomeEmployee();
-        this.state = new UserEmployeeState();
-    }
-
-    becomeUnassociated() {
-        this.state.assertBecomeUnassociated();
-        this.state = new UserUnassociatedState();
+        this.role = UserFactoryState.fromRole(target);
     }
 
     getName(): string {
@@ -42,7 +34,7 @@ export default class User {
         return this.passwordHash.toString();
     }
 
-    getState(): string {
-        return this.state.toString();
+    getRole(): string {
+        return this.role.toString();
     }
 };

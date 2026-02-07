@@ -12,7 +12,7 @@ export default class UserRepositoryImpl implements IUserRepository {
         try {
             const entity: UserPersistenceDTO = UserMapper.domainToEntity(user);
 
-            const created = await prisma.peoples.create({
+            const created = await prisma.users.create({
                 data: entity
             });
 
@@ -30,7 +30,7 @@ export default class UserRepositoryImpl implements IUserRepository {
 
     async findAll(): Promise<User[]> {
         try {
-            const entities = await prisma.peoples.findMany();
+            const entities = await prisma.users.findMany();
             const users: User[] = [];
 
             entities.map(entity => {
@@ -46,7 +46,7 @@ export default class UserRepositoryImpl implements IUserRepository {
 
     async findByEmail(email: string): Promise<User> {
         try {
-            const entity = await prisma.peoples.findFirst({
+            const entity = await prisma.users.findFirst({
                 where: { email }
             })
 
@@ -66,7 +66,7 @@ export default class UserRepositoryImpl implements IUserRepository {
         try {
             const entity = UserMapper.domainToEntity(user);
 
-            const updated = await prisma.peoples.update({
+            const updated = await prisma.users.update({
                 where: {email: entity.email},
                 data: entity
             })

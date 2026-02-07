@@ -1,18 +1,17 @@
+import Role from "../ValueObjects/Role";
 import UserState from "../ValueObjects/UserState";
 
 export default class UserUnassociatedState extends UserState {
-    assertBecomeBoss(): void {
+    canChangeTo(target: Role): boolean {
+        return target !== Role.UNASSOCIATED;
     }
 
-    assertBecomeEmployee(): void {
-    }
-
-    assertBecomeUnassociated(): void {
-        throw new Error("User already unassociated");
+    toRole(): Role {
+        return Role.UNASSOCIATED
     }
 
     toString(): string {
         return "UNASSOCIATED";
     }
-
+    
 }

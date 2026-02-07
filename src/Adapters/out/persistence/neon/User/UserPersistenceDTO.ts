@@ -1,10 +1,10 @@
-import { PeopleState } from "@/Infrastructure/generated/prisma/enums";
+import { UserRoles } from "@/Infrastructure/generated/prisma/enums";
 
 interface UserPersistenceDTO  {
     name: string,
     email: string,
     passwordHash: string,
-    state: PeopleState
+    role: UserRoles
 }
 
 export default UserPersistenceDTO;

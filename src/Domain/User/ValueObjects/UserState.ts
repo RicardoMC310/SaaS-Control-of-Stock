@@ -1,8 +1,8 @@
+import Role from "./Role";
 
 abstract class UserState {
-    abstract assertBecomeBoss(): void;
-    abstract assertBecomeEmployee(): void;
-    abstract assertBecomeUnassociated(): void;
+    abstract canChangeTo(target: Role): boolean;
+    abstract toRole(): Role;
 
     abstract toString(): string;
 }

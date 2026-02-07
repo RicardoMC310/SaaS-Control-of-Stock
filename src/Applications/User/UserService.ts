@@ -6,19 +6,21 @@ import Email from "@/Domain/User/ValueObjects/Email";
 import Password from "@/Domain/User/ValueObjects/PasswordHash";
 import UserMapper from "@/Infrastructure/Mappers/UserMapper";
 import UserResponseDTO from "@/Domain/User/UserResponseDTO";
-import UserUnassociatedState from "@/Domain/User/States/UserUnassociatedState";
+import Role from "@/Domain/User/ValueObjects/Role";
+import UserFactoryState from "@/Domain/User/UserFactoryRole";
+import UserChangeRoleDTO from "./UserChangeRoleDTO";
 
 export default class UserService {
     constructor(
         private readonly repository: IUserRepository
-    ) {}
+    ) { }
 
     async save(userCreateDTO: CreateUserDTO): Promise<UserResponseDTO> {
         const user = new User(
             Name.create(userCreateDTO.name),
             Email.create(userCreateDTO.email),
             Password.create(userCreateDTO.password),
-            new UserUnassociatedState()
+            UserFactoryState.fromRole(Role.UNASSOCIATED)
         );
 
         const userSaved = await this.repository.save(user);
@@ -37,33 +39,20 @@ export default class UserService {
         return usersDTO;
     }
 
-    async makeUserBoss(email: string): Promise<UserResponseDTO> {
-        const user = await this.repository.findByEmail(email);
+    async changeRole(userChangeRoleDTO: UserChangeRoleDTO): Promise<UserResponseDTO> {
+        const user = await this.repository.findByEmail(userChangeRoleDTO.email);
 
-        user.becomeBoss();
+        if (!this.existsRole(userChangeRoleDTO.role))
+            throw new Error(`Missing role ${userChangeRoleDTO.role}`);
 
-        const userUpdated = await this.repository.updated(user);
-
-        return UserMapper.domainToDTO(userUpdated);
-    }
-
-    async makeUserEmployee(email: string): Promise<UserResponseDTO> {
-        const user = await this.repository.findByEmail(email);
-
-        user.becomeEmployee();
+        user.changeRole(userChangeRoleDTO.role as Role);
 
         const userUpdated = await this.repository.updated(user);
 
         return UserMapper.domainToDTO(userUpdated);
     }
 
-    async makeUserUnassociated(email: string): Promise<UserResponseDTO> {
-        const user = await this.repository.findByEmail(email);
-
-        user.becomeUnassociated();
-
-        const userUpdated = await this.repository.updated(user);
-
-        return UserMapper.domainToDTO(userUpdated);
+    private existsRole(role: string): boolean {
+        return Object.values(Role).includes(role as Role);
     }
 }
