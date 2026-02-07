@@ -39,7 +39,7 @@ UserRouter.post("/find/by/email", APIController({
 UserRouter.put("/change/role", APIController({
     handler: async (req: Request) => {
         const userChangeRoleDTO: UserChangeRoleDTO = req.body;
-        userChangeRoleDTO.role = userChangeRoleDTO.role.toUpperCase();
+        userChangeRoleDTO.role = userChangeRoleDTO.role?.toUpperCase();
 
         return await userService.changeRole(userChangeRoleDTO);
     },
