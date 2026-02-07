@@ -1,3 +1,4 @@
+import UserAdminState from "./Roles/UserAdminState";
 import UserBossState from "./Roles/UserBossState";
 import UserEmployeeState from "./Roles/UserEmployeeState";
 import UserUnassociatedState from "./Roles/UserUnassociatedState";
@@ -13,6 +14,8 @@ export default class UserFactoryState {
                 return new UserBossState();
             case Role.EMPLOYEE:
                 return new UserEmployeeState();
+            case Role.ADMIN:
+                return new UserAdminState();
             default:
                 throw new Error("Invalid role");
         }
