@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client"
   output   = "../src/Infrastructure/generated/prisma"
@@ -13,38 +7,36 @@ datasource db {
   provider = "postgresql"
 }
 
-enum UserRoles {
-  UNASSOCIATED
-  BOSS
-  EMPLOYEE
-}
-
 model Users {
-  ID           String      @id @default(cuid())
+  ID           String    @id @default(cuid())
   name         String
-  email        String      @unique
+  email        String    @unique
   passwordHash String
-  role        UserRoles @default(UNASSOCIATED)
-  // if EMPLOYEE
   companyID    String?
-  company      Company?    @relation("EmployeeCompany", fields: [companyID], references: [ID], onUpdate: Cascade)
-  // if BOSS
-  ownedCompany Company?    @relation("BossCompany")
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  role         UserRoles @default(UNASSOCIATED)
+  ownedCompany Company?  @relation("BossCompany")
+  company      Company?  @relation("EmployeeCompany", fields: [companyID], references: [ID])
 
   @@index([email])
 }
 
 model Company {
-  ID        String    @id @default(cuid())
-  name      String    @unique
-  // What`s peoples boss
-  bossID    String    @unique
-  boss      Users   @relation("BossCompany", fields: [bossID], references: [ID], onUpdate: Cascade)
-  employees Users[] @relation("EmployeeCompany")
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  ID        String   @id @default(cuid())
+  name      String   @unique
+  bossID    String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  boss      Users    @relation("BossCompany", fields: [bossID], references: [ID])
+  employees Users[]  @relation("EmployeeCompany")
 
   @@index([name])
+}
+
+enum UserRoles {
+  UNASSOCIATED
+  BOSS
+  EMPLOYEE
+  ADMIN
 }
