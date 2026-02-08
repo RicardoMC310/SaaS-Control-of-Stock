@@ -1,6 +1,6 @@
 import IUserRepository from "@/Domain/User/IUserRepository";
 import User from "@/Domain/User/User";
-import CreateUserDTO from "./UserCreateDTO";
+import UserCreateDTO from "./UserCreateDTO";
 import Name from "@/Domain/User/ValueObjects/Name";
 import Email from "@/Domain/User/ValueObjects/Email";
 import Password from "@/Domain/User/ValueObjects/PasswordHash";
@@ -14,10 +14,10 @@ import IUserMapper from "./IUserMapper";
 export default class UserService {
     constructor(
         private readonly repository: IUserRepository,
-        private readonly userMapper: IUserMapper
+        private readonly userMapper: IUserMapper,
     ) { }
 
-    async save(userCreateDTO: CreateUserDTO): Promise<UserResponseDTO> {
+    async save(userCreateDTO: UserCreateDTO): Promise<UserResponseDTO> {
         const user = new User(
             Name.create(userCreateDTO.name),
             Email.create(userCreateDTO.email),

@@ -2,11 +2,12 @@ import express, { type Router, type Request } from "express";
 import UserService from "@/Applications/User/UserService";
 import UserRepositoryImpl from "@/Adapters/out/persistence/neon/User/UserRepositoryImpl";
 import APIController from "@/Infrastructure/APIUtils/APIWrapper";
-import CreateUserDTO from "@/Applications/User/UserCreateDTO";
+import UserCreateDTO from "@/Applications/User/UserCreateDTO";
 import UserChangeRoleDTO from "@/Applications/User/UserChangeRoleDTO";
 import UserFindByEmailDTO from "@/Applications/User/UserFindByEmailDTO";
 import IUserMapper from "@/Applications/User/IUserMapper";
-import UserMapperImpl from "@/Adapters/out/Mappers/UserMapperImpl";
+import UserMapperImpl from "@/Adapters/Mappers/UserMapperImpl";
+import AuthSessionImpl from "@/Adapters/Session/AuthSessionImpl";
 
 const UserRouter: Router = express.Router();
 
@@ -14,9 +15,10 @@ const userMapper: IUserMapper = new UserMapperImpl();
 const userRepository = new UserRepositoryImpl(userMapper);
 const userService = new UserService(userRepository, userMapper);
 
+
 UserRouter.post("/create", APIController({
     handler: async (req: Request) => {
-        const createUserDTO: CreateUserDTO = req.body;
+        const createUserDTO: UserCreateDTO = req.body;
 
         return await userService.save(createUserDTO);
     },
