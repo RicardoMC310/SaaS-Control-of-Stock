@@ -7,7 +7,6 @@ import UserChangeRoleDTO from "@/Applications/User/UserChangeRoleDTO";
 import UserFindByEmailDTO from "@/Applications/User/UserFindByEmailDTO";
 import IUserMapper from "@/Applications/User/IUserMapper";
 import UserMapperImpl from "@/Adapters/Mappers/UserMapperImpl";
-import AuthSessionImpl from "@/Adapters/Session/AuthSessionImpl";
 
 const UserRouter: Router = express.Router();
 
