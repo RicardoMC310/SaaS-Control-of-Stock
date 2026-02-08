@@ -14,6 +14,10 @@ export default class User {
         private role: UserState,
     ) { }
 
+    comparePasswordHash(password: string): boolean {
+        return this.passwordHash.compareHash(password);
+    }
+
     changeRole(target: Role): void {
         if (!this.role.canChangeTo(target)) {
             throw new Error(`Cannot change from ${this.role.toRole()} to ${target as string}`);

@@ -4,7 +4,6 @@ import CreateUserDTO from "./UserCreateDTO";
 import Name from "@/Domain/User/ValueObjects/Name";
 import Email from "@/Domain/User/ValueObjects/Email";
 import Password from "@/Domain/User/ValueObjects/PasswordHash";
-import UserMapper from "@/Infrastructure/Mappers/UserMapper";
 import UserResponseDTO from "@/Domain/User/UserResponseDTO";
 import Role from "@/Domain/User/ValueObjects/Role";
 import UserFactoryState from "@/Domain/User/UserFactoryRole";

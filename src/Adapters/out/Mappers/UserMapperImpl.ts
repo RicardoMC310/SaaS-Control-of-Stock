@@ -22,7 +22,7 @@ export default class UserMapperImpl implements IUserMapper {
         return new User(
             Name.create(entity.name),
             Email.create(entity.email),
-            Password.create(entity.passwordHash),
+            Password.createWithAExists(entity.passwordHash),
             UserFactoryState.fromString(entity.role)
         )
     }

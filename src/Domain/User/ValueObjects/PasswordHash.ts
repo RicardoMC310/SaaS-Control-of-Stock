@@ -1,4 +1,4 @@
-import { hashSync as bcriptHashSync } from "bcrypt";
+import { hashSync as bcriptHashSync, compareSync as bcriptCompareSync } from "bcrypt";
 
 export default class Password {
     private static readonly BITMASK_HASH_CORRECT: number = 0b11111;
@@ -24,6 +24,16 @@ export default class Password {
 
     toString(): string {
         return this.hash;
+    }
+
+    compareHash(password: string): boolean {
+        return bcriptCompareSync(password, this.hash);
+    }
+
+    static createWithAExists(hash: string) {
+        hash = hash.trim();
+
+        return new Password(hash);
     }
 
     static create(hash: string): Password {
