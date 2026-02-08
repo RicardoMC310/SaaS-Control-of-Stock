@@ -15,6 +15,7 @@ class DotEnv {
 export default {
     SERVER_PORT: parseInt(DotEnv.getenv("SERVER_PORT", "8080")),
     SERVER_HOST: DotEnv.getenv("SERVER_HOST", "127.0.0.1"),
+    SESSION_DURATION: DotEnv.getenv("SESSION_DURATION", "16h"),
     DATABASE_URL: DotEnv.getenv("DATABASE_URL"),
     KEY_SSL_PATH: DotEnv.getenv("KEY_SSL_PATH"),
     CERT_SSL_PATH: DotEnv.getenv("CERT_SSL_PATH"),
