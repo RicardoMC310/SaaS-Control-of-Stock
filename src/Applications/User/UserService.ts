@@ -1,20 +1,23 @@
 import IUserRepository from "@/Domain/User/IUserRepository";
 import User from "@/Domain/User/User";
-import UserCreateDTO from "./UserCreateDTO";
+import UserCreateDTO from "./DTOs/UserCreateDTO";
 import Name from "@/Domain/User/ValueObjects/Name";
 import Email from "@/Domain/User/ValueObjects/Email";
 import Password from "@/Domain/User/ValueObjects/PasswordHash";
 import UserResponseDTO from "@/Domain/User/UserResponseDTO";
 import Role from "@/Domain/User/ValueObjects/Role";
 import UserFactoryState from "@/Domain/User/UserFactoryRole";
-import UserChangeRoleDTO from "./UserChangeRoleDTO";
-import UserFindByEmailDTO from "./UserFindByEmailDTO";
+import UserChangeRoleDTO from "./DTOs/UserChangeRoleDTO";
+import UserFindByEmailDTO from "./DTOs/UserFindByEmailDTO";
 import IUserMapper from "./IUserMapper";
+import ISessionStorage from "../Session/ISessionStorage";
+import AuthSession from "../Auth/AuthSession";
 
 export default class UserService {
     constructor(
         private readonly repository: IUserRepository,
         private readonly userMapper: IUserMapper,
+        private readonly authSessionStorage: ISessionStorage<AuthSession>
     ) { }
 
     async save(userCreateDTO: UserCreateDTO): Promise<UserResponseDTO> {
@@ -41,7 +44,7 @@ export default class UserService {
         return usersDTO;
     }
 
-    async changeRole(userChangeRoleDTO: UserChangeRoleDTO): Promise<UserResponseDTO> {
+    async changeRole(sessionID: string, userChangeRoleDTO: UserChangeRoleDTO): Promise<UserResponseDTO> {
         const user = await this.repository.findByEmail(userChangeRoleDTO.email);
 
         if (!this.existsRole(userChangeRoleDTO.role))
@@ -50,6 +53,16 @@ export default class UserService {
         user.changeRole(userChangeRoleDTO.role as Role);
 
         const userUpdated = await this.repository.updated(user);
+
+        const authSession: AuthSession = {
+            user: {
+                name: user.getName(),
+                email: user.getEmail(),
+                role: user.getRole()
+            }
+        }
+
+        this.authSessionStorage.update(sessionID, authSession);
 
         return this.userMapper.domainToDTO(userUpdated);
     }

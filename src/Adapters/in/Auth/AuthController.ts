@@ -1,69 +1,65 @@
-import AuthMapperImpl from "@/Adapters/Mappers/AuthMapperImpl";
-import UserMapperImpl from "@/Adapters/Mappers/UserMapperImpl";
-import UserRepositoryImpl from "@/Adapters/out/persistence/neon/User/UserRepositoryImpl";
-import AuthSessionImpl from "@/Adapters/Session/AuthSessionImpl";
-import AuthLoginDTO from "@/Applications/Auth/AuthLoginDTO";
 import AuthService from "@/Applications/Auth/AuthService";
-import IAuthMapper from "@/Applications/Auth/IAuthMapper";
-import IAuthSession from "@/Applications/Auth/IAuthSession";
-import IUserMapper from "@/Applications/User/IUserMapper";
+import AuthLoginDTO from "@/Applications/Auth/DTOs/AuthLoginDTO";
+import APIError from "@/Infrastructure/APIUtils/APIError";
 import APIMiddleWare from "@/Infrastructure/APIUtils/APIMiddleWare";
+import APIRequest from "@/Infrastructure/APIUtils/APIRequest";
 import APIController from "@/Infrastructure/APIUtils/APIWrapper";
-import AuthRequest from "@/Infrastructure/APIUtils/AuthRequest";
-import express, { type Router, type Request } from "express";
+import express, { Router } from "express";
 
-const AuthRouter: Router = express.Router();
+export default function createAuthRouter(
+    authService: AuthService
+): Router {
+    const AuthRouter: Router = express.Router();
 
-const userMapper: IUserMapper = new UserMapperImpl();
-const userRepository = new UserRepositoryImpl(userMapper);
+    AuthRouter.post("/login",
+        APIController({
+            handler: async (req: APIRequest) => {
+                const authLoginDTO: AuthLoginDTO = req.body;
 
-const authSession: IAuthSession = new AuthSessionImpl();
-const authMapper: IAuthMapper = new AuthMapperImpl();
-const authService = new AuthService(userRepository, authSession, authMapper);
+                return await authService.login(authLoginDTO);
+            },
+            message: "Login successful"
+        })
+    );
 
-AuthRouter.post("/login", APIController({
-    handler: async (req: Request) => {
-        const authLoginDTO: AuthLoginDTO = req.body;
+    AuthRouter.get("/whoami",
+        APIMiddleWare({
+            handler: (req: APIRequest) => {
+                const token = req.headers.authorization;
 
-        return await authService.login(authLoginDTO);
-    },
-    message: "login successful"
-}));
+                if (!token)
+                    throw new APIError("Token required", 401);
 
-AuthRouter.get("/whoami",
-    APIMiddleWare({
-        handler: (req: AuthRequest) => {
-            const token = req.headers.authorization;
+                req.sessionID = token;
+            }
+        }),
+        APIController({
+            handler: async (req: APIRequest) => {
+                return await authService.whoami(req.sessionID || "");
+            },
+            message: "User found"
+        })
+    );
 
-            if (!token)
-                throw new Error("Token authorization not found");
+    AuthRouter.delete("/logout",
+        APIMiddleWare({
+            handler: (req: APIRequest) => {
+                const token = req.headers.authorization;
 
-            req.token = token as string;
-        },
-    }),
-    APIController({
-        handler: async (req: AuthRequest) => {
-            return await authService.whoami(req.token ?? "");
-        },
-        message: "Your is a user"
-    }));
+                if (!token)
+                    throw new APIError("Token required", 401);
 
-AuthRouter.delete("/logout",
-    APIMiddleWare({
-        handler: (req: AuthRequest) => {
-            const token = req.headers.authorization;
+                req.sessionID = token;
+            }
+        }),
+        APIController({
+            handler: async (req: APIRequest) => {
+                return await authService.logout(req.sessionID || "");
+            },
+            message: "User found",
+            status: 204
+        })
+    );
 
-            if (!token)
-                throw new Error("Token authorization not found");
-
-            req.token = token as string;
-        }
-    }),
-    APIController({
-        handler: async (req: AuthRequest) => {
-            await authService.logout(req.token ?? "");
-        },
-        message: "Logout successful"
-    }));
-
-export default AuthRouter;
+    return AuthRouter;
+}

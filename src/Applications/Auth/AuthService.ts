@@ -1,44 +1,51 @@
 import IUserRepository from "@/Domain/User/IUserRepository";
-import AuthResponseDTO from "./AuthResponseDTO";
-import AuthLoginDTO from "./AuthLoginDTO";
-import User from "@/Domain/User/User";
-import IAuthSession from "./IAuthSession";
-import AuthSessionDTO from "./AuthSessionDTO";
+import ISessionStorage from "../Session/ISessionStorage";
+import AuthSession from "./AuthSession";
+import AuthLoginDTO from "./DTOs/AuthLoginDTO";
+import AuthResponseLoginDTO from "./DTOs/AuthResponseLoginDTO";
 import UserResponseDTO from "@/Domain/User/UserResponseDTO";
-import IAuthMapper from "./IAuthMapper";
+import AuthUpdateSessionDTO from "./DTOs/AuthUpdateSessionDTO";
 
 export default class AuthService {
+
     constructor(
-        private readonly repository: IUserRepository,
-        private readonly session: IAuthSession,
-        private readonly mapper: IAuthMapper
-    ) {}
+        private readonly sessionStorage: ISessionStorage<AuthSession>,
+        private readonly userRepository: IUserRepository
+    ) { }
 
-    async login(authLoginDTO: AuthLoginDTO): Promise<AuthResponseDTO> {
-        const user: User = await this.repository.findByEmail(authLoginDTO.email);
+    async login(authLoginDTO: AuthLoginDTO): Promise<AuthResponseLoginDTO> {
+        const user = await this.userRepository.findByEmail(authLoginDTO.email);
 
-        if (!user.comparePasswordHash(authLoginDTO.password)) 
-            throw new Error("Password does not match");
+        if (!user.comparePasswordHash(authLoginDTO.password))
+            throw new Error("Password not match");
 
-        const authSessionDTO: AuthSessionDTO = this.mapper.userToAuth(user);
+        const authSession: AuthSession = {
+            user: {
+                name: user.getName(),
+                email: user.getEmail(),
+                role: user.getRole()
+            }
+        };
 
-        const key = this.session.save(authSessionDTO);
+        const sessionID = this.sessionStorage.save(authSession);
 
         return {
-            sessionID: key
-        };
+            sessionID
+        }
     }
 
-    async whoami(token: string): Promise<UserResponseDTO> {
-        const auth = this.session.get(token);
+    async whoami(sessionID: string): Promise<UserResponseDTO> {
+        const user = this.sessionStorage.get(sessionID);
 
-        return this.mapper.authToUser(auth);
+        return {
+            name: user.user.name,
+            email: user.user.email,
+            role: user.user.role,            
+        }
     }
 
-    async logout(token: string): Promise<void> {
-        const isSuccessfullDeleted = this.session.delete(token);
-
-        if (!isSuccessfullDeleted)
-            throw new Error("Error deleting session");
+    async logout(sessionID: string): Promise<void> {
+        this.sessionStorage.delete(sessionID);
     }
+
 }
