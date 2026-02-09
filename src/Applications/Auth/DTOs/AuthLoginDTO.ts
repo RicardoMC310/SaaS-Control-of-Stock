@@ -1,4 +1,5 @@
 export default interface AuthLoginDTO {
+    name: string;
     email: string;
-    password: string;
+    role: string;
 }

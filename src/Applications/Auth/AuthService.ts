@@ -1,4 +1,3 @@
-import IUserRepository from "@/Domain/User/IUserRepository";
 import ISessionStorage from "../Session/ISessionStorage";
 import AuthSession from "./AuthSession";
 import AuthLoginDTO from "./DTOs/AuthLoginDTO";
@@ -10,20 +9,15 @@ export default class AuthService {
 
     constructor(
         private readonly sessionStorage: ISessionStorage<AuthSession>,
-        private readonly userRepository: IUserRepository
     ) { }
 
     async login(authLoginDTO: AuthLoginDTO): Promise<AuthResponseLoginDTO> {
-        const user = await this.userRepository.findByEmail(authLoginDTO.email);
-
-        if (!user.comparePasswordHash(authLoginDTO.password))
-            throw new Error("Password not match");
 
         const authSession: AuthSession = {
             user: {
-                name: user.getName(),
-                email: user.getEmail(),
-                role: user.getRole()
+                name: authLoginDTO.name,
+                email: authLoginDTO.email,
+                role: authLoginDTO.role
             }
         };
 
@@ -40,12 +34,22 @@ export default class AuthService {
         return {
             name: user.user.name,
             email: user.user.email,
-            role: user.user.role,            
+            role: user.user.role,
         }
     }
 
     async logout(sessionID: string): Promise<void> {
         this.sessionStorage.delete(sessionID);
+    }
+
+    async update(sessionID: string, authUpdateSessionDTO: AuthUpdateSessionDTO): Promise<void> {
+        this.sessionStorage.update(sessionID, {
+            user: {
+                name: authUpdateSessionDTO.name, 
+                email: authUpdateSessionDTO.email, 
+                role: authUpdateSessionDTO.role
+            }
+        });
     }
 
 }

@@ -7,9 +7,11 @@ import UserFindByEmailDTO from "@/Applications/User/DTOs/UserFindByEmailDTO";
 import APIMiddleWare from "@/Infrastructure/APIUtils/APIMiddleWare";
 import APIRequest from "@/Infrastructure/APIUtils/APIRequest";
 import APIError from "@/Infrastructure/APIUtils/APIError";
+import AuthService from "@/Applications/Auth/AuthService";
 
 export default function createUserRouter(
-    userService: UserService
+    userService: UserService,
+    authService: AuthService
 ): Router {
     const UserRouter: Router = express.Router();
 
@@ -57,7 +59,11 @@ export default function createUserRouter(
                 const userChangeRoleDTO: UserChangeRoleDTO = req.body;
                 userChangeRoleDTO.role = userChangeRoleDTO.role?.toUpperCase();
 
-                return await userService.changeRole(req.sessionID || "", userChangeRoleDTO);
+                const user = await userService.changeRole(userChangeRoleDTO);
+
+                authService.update(req.sessionID || "", user);
+
+                return user;
             },
             message: "User updated role"
         }));

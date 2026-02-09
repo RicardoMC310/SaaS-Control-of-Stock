@@ -17,7 +17,6 @@ export default class UserService {
     constructor(
         private readonly repository: IUserRepository,
         private readonly userMapper: IUserMapper,
-        private readonly authSessionStorage: ISessionStorage<AuthSession>
     ) { }
 
     async save(userCreateDTO: UserCreateDTO): Promise<UserResponseDTO> {
@@ -44,7 +43,7 @@ export default class UserService {
         return usersDTO;
     }
 
-    async changeRole(sessionID: string, userChangeRoleDTO: UserChangeRoleDTO): Promise<UserResponseDTO> {
+    async changeRole(userChangeRoleDTO: UserChangeRoleDTO): Promise<UserResponseDTO> {
         const user = await this.repository.findByEmail(userChangeRoleDTO.email);
 
         if (!this.existsRole(userChangeRoleDTO.role))
@@ -53,16 +52,6 @@ export default class UserService {
         user.changeRole(userChangeRoleDTO.role as Role);
 
         const userUpdated = await this.repository.updated(user);
-
-        const authSession: AuthSession = {
-            user: {
-                name: user.getName(),
-                email: user.getEmail(),
-                role: user.getRole()
-            }
-        }
-
-        this.authSessionStorage.update(sessionID, authSession);
 
         return this.userMapper.domainToDTO(userUpdated);
     }
@@ -75,7 +64,21 @@ export default class UserService {
         return this.userMapper.domainToDTO(user);
     }
 
+    async findByEmailWithComparationPassword(userFindByEmailDTO: UserFindByEmailDTO, password: string): Promise<UserResponseDTO> {
+        Email.validate(userFindByEmailDTO.email);
+
+        const user = await this.repository.findByEmail(userFindByEmailDTO.email);
+
+        this.compareUserPassword(user, password);
+
+        return this.userMapper.domainToDTO(user);
+    }
+
     private existsRole(role: string): boolean {
         return Object.values(Role).includes(role as Role);
+    }
+
+    private compareUserPassword(user: User, password: string): boolean {
+        return user.comparePasswordHash(password);
     }
 }

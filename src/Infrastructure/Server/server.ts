@@ -15,13 +15,13 @@ const authSessionStorage = new AuthMapSessionStorage<AuthSession>();
 
 const userMapperImpl = new UserMapperImpl();
 const userRepositoryImpl = new UserRepositoryImpl(userMapperImpl);
-const userService = new UserService(userRepositoryImpl, userMapperImpl, authSessionStorage);
+const userService = new UserService(userRepositoryImpl, userMapperImpl);
 
-const authService = new AuthService(authSessionStorage, userRepositoryImpl);
+const authService = new AuthService(authSessionStorage);
 
 const ApiRouter: APIRouter = new APIRouter();
-ApiRouter.loadRoute("/user", createUserRouter(userService));
-ApiRouter.loadRoute("/auth", createAuthRouter(authService));
+ApiRouter.loadRoute("/user", createUserRouter(userService, authService));
+ApiRouter.loadRoute("/auth", createAuthRouter(authService, userService));
 
 const App: AppServer = new AppServer(env.SERVER_HOST, env.SERVER_PORT, ApiRouter);
 
