@@ -1,3 +1,5 @@
 backend/node_modules/
 backend/.env
 backend/pnpm-lock.yaml
+
+frontend/.vscode/
