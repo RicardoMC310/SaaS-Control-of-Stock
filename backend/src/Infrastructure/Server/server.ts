@@ -1,14 +1,18 @@
-console.log("teste");
-// permitir ver ip real do cliente inves do ip do proxy no build
-// app.set("trust proxy", 1)
+import APIRouter from "@/Infrastructure/APIUtils/APIRouter";
+import App from "./app";
+import env from "@/Infrastructure/Config/env";
+import { Router } from "express";
 
-export default class App {
-    constructor(
-        private readonly port: number,
-        private readonly host: string
-    ){}
+const UserRouter: Router = Router();
+UserRouter.get("/", (req, res) => {
+    res.status(200).json({
+        message: "ok"
+    });
+});
 
-    run(): void {
-        console.log("rodando");
-    }
-}
+const apiRouter: APIRouter = new APIRouter(); 
+apiRouter.loadRoute("/", UserRouter);
+
+const app: App = new App(env.SERVER_PORT, env.SERVER_HOST, apiRouter);
+
+app.run();

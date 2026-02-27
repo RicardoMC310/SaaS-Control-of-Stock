@@ -15,14 +15,18 @@
   "license": "MIT",
   "packageManager": "pnpm@10.28.2",
   "dependencies": {
+    "@types/helmet": "^4.0.0",
     "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
+    "helmet": "^8.1.0",
     "pg": "^8.18.0"
   },
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.13",
     "@types/bcrypt": "^6.0.0",
+    "@types/cors": "^2.8.19",
     "@types/dotenv": "^8.2.3",
     "@types/express": "^5.0.6",
     "@types/node": "^25.1.0",
