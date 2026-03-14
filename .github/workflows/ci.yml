@@ -1,47 +1,35 @@
 name: CI
 
 on:
-    push:
-        branches: [development]
-        paths:
-            - "backend/**"
-
-    pull_request:
-        branches: [development]
-        paths:
-            - "backend/**"
+  pull_request:
+    branches: [development]
+    paths:
+      - "backend/**"
 
 jobs:
-    test:
-        name: Testes - Backend
-        runs-on: ubuntu-latest
-        defaults:
-            run:
-                working-directory: ./backend
+  test:
+    name: Testes do Backend
+    runs-on: ubuntu-latest
 
-        steps:
+    defaults:
+      run:
+        working-directory: ./backend
 
-            - name: Checkout
-              uses: actions/checkout@v4
+    steps:
 
-            - name: Setup Pnpm
-              uses: pnpm/action-setup@v4
-              with:
-                version: 10
-                run_install: false
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
 
-            - name: Setup Node.js
-              uses: actions/setup-node@v4
-              with:
-                node-version: "24"
-                cache: "pnpm"
-                cache-dependency-path: ./backend/pnpm-lock.yaml
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-            - name: Install Dependencies
-              run: |
-                pnpm install --frozen-lockfile
+      - name: Instalar pnpm
+        run: npm install -g pnpm
 
-            - name: Run Tests
-              run: |
-                pnpm test
-                
+      - name: Instalar dependências
+        run: pnpm install
+
+      - name: Rodar testes
+        run: pnpm test
