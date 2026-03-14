@@ -10,7 +10,8 @@ app.get("/healthy", (_req: Request, res: Response) => {
             user:
             {
                 name: "Ricardo",
-                age: 13
+                age: 13,
+                email: "rmc777@gmail.com"
             }
         }
     });
