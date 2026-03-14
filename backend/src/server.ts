@@ -9,7 +9,8 @@ app.get("/healthy", (_req: Request, res: Response) => {
         data: {
             user:
             {
-                name: "Ricardo"
+                name: "Ricardo",
+                age: 13
             }
         }
     });
