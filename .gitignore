@@ -1,0 +1,8 @@
+backend/node_modules
+backend/.env
+backend/package-lock.json
+backend/pnpm-lock.yaml
+backend/coverage
+backend/dist/
+
+deploy/.env
