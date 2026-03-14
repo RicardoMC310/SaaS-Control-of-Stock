@@ -7,11 +7,11 @@ RUN npm install -g pnpm
 WORKDIR /app
 
 # Copia apenas arquivos de dependência primeiro (melhora cache)
-COPY ./package.json ./pnpm-lock.yaml ./
+COPY ./package.json ./
 COPY ./tsconfig.json ./
 
 # Instala dependências
-RUN pnpm install --frozen-lockfile
+RUN pnpm install
 
 # Copia código
 COPY src ./src
