@@ -5,6 +5,15 @@ const app = express();
 app.get("/healthy", (_req: Request, res: Response) => {
     res.status(200).json({
         message: "OK!",
+        status: 200,
+        data: {
+            user:
+            {
+                name: "Ricardo",
+                age: 13,
+                email: "rmc777@gmail.com"
+            }
+        }
     });
 });
 
