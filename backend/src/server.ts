@@ -13,7 +13,8 @@ app.get("/healthy", (_req: Request, res: Response) => {
                 age: 13,
                 email: "rmc777@gmail.com",
                 company: {
-                    name: "Arias"
+                    name: "Arias",
+                    number_employess: 10
                 }
             }
         }
