@@ -23,7 +23,7 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
       - name: Build da imagem
-        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/arias-backend:latest ./backend
+        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/arias-backend:latest ./backend/
 
       - name: Push da imagem
         run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/arias-backend:latest

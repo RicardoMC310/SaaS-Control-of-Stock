@@ -11,7 +11,7 @@ COPY ./package.json ./
 COPY ./tsconfig.json ./
 
 # Instala dependências
-RUN pnpm install --frozen-lockfile
+RUN pnpm install
 
 # Copia código
 COPY src ./src
