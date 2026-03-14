@@ -7,7 +7,7 @@ RUN npm install -g pnpm
 WORKDIR /app
 
 # Copia apenas arquivos de dependência primeiro (melhora cache)
-COPY ./package.json ./pnpm-lock.yaml ./
+COPY ./package.json ./
 COPY ./tsconfig.json ./
 
 # Instala dependências

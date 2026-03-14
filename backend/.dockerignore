@@ -3,3 +3,4 @@ coverage
 .git
 .gitignore
 Dockerfile
+pnpm-lock.yaml
