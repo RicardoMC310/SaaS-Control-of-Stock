@@ -16,14 +16,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Login Docker Hub
+      - name: Login no Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
-      - name: Build imagem
+      - name: Build da imagem
         run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/arias-backend:latest ./backend
 
-      - name: Push imagem
+      - name: Push da imagem
         run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/arias-backend:latest

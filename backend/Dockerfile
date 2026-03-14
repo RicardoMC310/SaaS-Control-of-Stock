@@ -1,18 +1,26 @@
-FROM node:25 AS build
+# ---------- Build stage ----------
+FROM node:22 AS build
 
+# Instala pnpm
 RUN npm install -g pnpm
 
 WORKDIR /app
 
-COPY package.json ./
-COPY pnpm-lock.yaml ./
+# Copia apenas arquivos de dependência primeiro (melhora cache)
+COPY package.json pnpm-lock.yaml ./
 COPY tsconfig.json ./
 
-COPY ./src ./src
+# Instala dependências
+RUN pnpm install --frozen-lockfile
 
-RUN pnpm install
+# Copia código
+COPY src ./src
+
+# Build do TypeScript
 RUN pnpm build
 
+
+# ---------- Runtime stage ----------
 FROM gcr.io/distroless/nodejs24-debian13
 
 WORKDIR /app
